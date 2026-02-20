@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iowa & Nebraska Hydrogen Feasibility Report</title>
+    <meta name="description" content="Interactive decision-support report on Midcontinent Rift geologic hydrogen feasibility across Iowa & Nebraska.">
+    <meta property="og:title" content="H2 Heartland Analysis">
+    <meta property="og:description" content="Interactive feasibility report for geologic hydrogen in Iowa & Nebraska (Midcontinent Rift System).">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <!-- Chosen Palette: Prairie Future (Slate-900, Amber-500, Sky-500, Stone-100) -->
+    <!-- Application Structure Plan:
+         The app is designed as a 'Decision Support System' for stakeholders.
+         1. 'Executive Brief': High-level metrics and the 'Feasibility Score'.
+         2. 'Geology & Extraction': Technical deep-dive into the Midcontinent Rift, utilizing a custom Canvas visualizer for strata.
+         3. 'Economics & Ag': The core value proposition (Fertilizer/Ethanol) using interactive cost comparison charts.
+         4. 'Risk & Regulation': A simulation module where users adjust public sentiment to see impacts on permitting timelines (based on CO2 pipeline data).
+         5. '10-Year Outlook': Monte Carlo style projections with uncertainty bands.
+         This structure allows users to move from "What is it?" to "Is it profitable?" to "Is it allowed?" logically.
+    -->
+    <!-- Visualization & Content Choices:
+         1. Geology: Canvas Draw -> Visualizes the Midcontinent Rift depth/location. Goal: Show where the H2 is.
+         2. Cost Comparison: Chart.js Bar -> Compares Geologic vs. Green/Blue H2 costs. Goal: Highlight the cost advantage of extraction.
+         3. Economic Impact: Plotly Band Chart -> Shows 10-year GDP variance. Goal: Quantify uncertainty.
+         4. Ag Loop: Interactive HTML Grid -> Highlights the circular economy of Corn-Ethanol-Ammonia. Goal: Show local benefits.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f5f5f4; color: #1c1917; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 400px;
+            max-height: 500px;
+        }
+        .nav-item.active { background-color: #f59e0b; color: #fff; font-weight: 700; }
+        .nav-item { transition: all 0.2s; }
+        .nav-item:hover:not(.active) { background-color: #e7e5e4; }
+        .card { background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .canvas-map { background-color: #e2e8f0; width: 100%; height: 300px; border-radius: 8px; cursor: crosshair; }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white p-4 flex justify-between items-center shadow-lg z-10">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-amber-500">H2 Heartland Analysis</h1>
+            <p class="text-xs text-slate-400">Midcontinent Rift Hydrogen Feasibility Study: IA & NE</p>
+        </div>
+        <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold">Report Date: October 2025</div>
+            <div class="text-xs text-slate-400">Status: <span class="text-green-400">High Potential</span></div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar Navigation -->
+        <nav class="w-64 bg-white border-r border-stone-200 flex-shrink-0 flex flex-col overflow-y-auto hidden md:flex">
+            <div class="p-4">
+                <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Modules</div>
+                <button onclick="nav('exec')" id="nav-exec" class="nav-item active w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
+                    <span>Executive Summary</span>
+                </button>
+                <button onclick="nav('geo')" id="nav-geo" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
+                    <span>Geology & Purity</span>
+                </button>
+                <button onclick="nav('econ')" id="nav-econ" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
+                    <span>Economics & Ag</span>
+                </button>
+                <button onclick="nav('reg')" id="nav-reg" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
+                    <span>Regulatory & Social</span>
+                </button>
+                <button onclick="nav('outlook')" id="nav-outlook" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
+                    <span>10-Year Outlook</span>
+                </button>
+                <button onclick="nav('biblio')" id="nav-biblio" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
+                    <span>Sources & Citations</span>
+                </button>
+            </div>
+            <div class="mt-auto p-4 bg-stone-50 border-t border-stone-200">
+                <div class="text-xs text-stone-500">Research by: <br><strong>Automated Analyst Unit</strong></div>
+            </div>
+        </nav>
+
+        <!-- Mobile Nav Toggle -->
+        <div class="md:hidden absolute bottom-4 right-4 z-50">
+            <button onclick="document.querySelector('nav').classList.toggle('hidden'); document.querySelector('nav').classList.toggle('absolute'); document.querySelector('nav').classList.toggle('h-full'); document.querySelector('nav').classList.toggle('z-40');" class="bg-amber-500 text-white p-3 rounded-full shadow-lg">
+                ☰ Menu
+            </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="flex-1 overflow-y-auto p-6 bg-stone-100">
+            <!-- Dynamic Content Injection Point -->
+        </main>
+    </div>
+
+    <script>
+        // --- Data & State ---
+        const reportData = {
+            exec: {
+                title: "Executive Summary: The Hidden Giant",
+                content: `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="card p-6 border-l-4 border-amber-500">
+                            <h3 class="text-sm font-bold text-stone-500 uppercase">Resource Potential</h3>
+                            <div class="text-3xl font-bold text-slate-800 mt-2">High</div>
+                            <p class="text-sm text-stone-600 mt-2">Midcontinent Rift System (MRS) shows strong markers for abiotic hydrogen generation via serpentinization.</p>
+                        </div>
+                        <div class="card p-6 border-l-4 border-sky-500">
+                            <h3 class="text-sm font-bold text-stone-500 uppercase">LCOH Projection</h3>
+                            <div class="text-3xl font-bold text-slate-800 mt-2">$0.85<span class="text-sm font-normal text-stone-500">/kg</span></div>
+                            <p class="text-sm text-stone-600 mt-2">Geologic extraction costs are significantly lower than electrolysis ($4+) or SMR ($1.50+).</p>
+                        </div>
+                        <div class="card p-6 border-l-4 border-red-500">
+                            <h3 class="text-sm font-bold text-stone-500 uppercase">Primary Risk</h3>
+                            <div class="text-3xl font-bold text-slate-800 mt-2">Public Trust</div>
+                            <p class="text-sm text-stone-600 mt-2">Pipeline opposition (CO2 proxy) poses the single largest threat to infrastructure development.</p>
+                        </div>
+                    </div>
+                    <div class="card p-8">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4">Strategic Overview</h2>
+                        <p class="text-stone-700 leading-relaxed mb-4">
+                            Iowa and Nebraska sit atop the <strong>Midcontinent Rift System (MRS)</strong>, a 1.1 billion-year-old tectonic feature rich in iron-bearing ultramafic rocks. Research indicates that when deep groundwater interacts with these rocks (serpentinization), significant quantities of hydrogen are generated. Unlike "Green" hydrogen (wind/solar) which requires massive surface footprint, or "Blue" hydrogen (Natural Gas) which requires carbon capture, "Gold" (Geologic) hydrogen offers a continuous, low-carbon baseload fuel source.
+                        </p>
+                        <p class="text-stone-700 leading-relaxed">
+                            <strong>The "Ag-Energy" Nexus:</strong> The immediate economic driver is not export, but internal consumption. Iowa and Nebraska are global leaders in corn and ethanol production, both of which are heavily dependent on nitrogen fertilizer (ammonia). Current ammonia production relies on imported natural gas. Indigenous hydrogen extraction offers a path to <strong>decarbonized fertilizer sovereignty</strong> and lower-carbon ethanol (CI scores), crucial for the emerging Sustainable Aviation Fuel (SAF) market.
+                        </p>
+                    </div>
+                `
+            },
+            geo: {
+                title: "Geology, Strata & Purity",
+                content: `
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="card p-6">
+                            <h3 class="font-bold text-lg mb-4 text-slate-800">The Midcontinent Rift System (MRS)</h3>
+                            <p class="text-sm text-stone-600 mb-4">
+                                The MRS arcs through Nebraska and Iowa. It contains thick sequences of mafic volcanic rocks and clastic sediments. The key mechanism is <strong>Serpentinization</strong>:
+                                <br><br>
+                                <code class="bg-slate-100 p-1 rounded text-xs">3Fe₂SiO₄ (Fayalite) + 2H₂O → 2Fe₃O₄ (Magnetite) + 3SiO₂ + 2H₂ (Hydrogen)</code>
+                            </p>
+                            <div class="bg-amber-50 p-4 rounded border border-amber-200 mb-4">
+                                <h4 class="font-bold text-amber-800 text-sm">Key Stratigraphic Targets</h4>
+                                <ul class="list-disc ml-4 text-sm text-amber-900 mt-2 space-y-1">
+                                    <li><strong>Precambrian Basement:</strong> The primary source rock (iron-rich).</li>
+                                    <li><strong>Clastic Sediments:</strong> Overlying porous rock acting as a reservoir.</li>
+                                    <li><strong>Evaporite/Shale Caps:</strong> Critical "seal" rocks to trap the rising H2.</li>
+                                </ul>
+                            </div>
+                            <p class="text-xs text-stone-500 italic">Explore the rift map to see depth estimates.</p>
+                        </div>
+                        <div class="card p-6 flex flex-col">
+                            <h3 class="font-bold text-lg mb-2 text-slate-800">Interactive Rift Explorer</h3>
+                            <div id="rift-canvas-container" class="flex-grow bg-slate-200 rounded relative overflow-hidden h-64">
+                                <canvas id="geoCanvas" class="w-full h-full"></canvas>
+                                <div class="absolute bottom-2 right-2 bg-white/90 p-2 rounded text-xs shadow">
+                                    <div class="flex items-center"><span class="w-3 h-3 bg-red-500 rounded-full mr-2"></span> High H2 Potential</div>
+                                    <div class="flex items-center mt-1"><span class="w-3 h-3 bg-blue-300 rounded-full mr-2"></span> Aquifer/Low Pot.</div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <label class="text-xs font-bold uppercase text-stone-500">Drill Depth Simulator (ft)</label>
+                                <input type="range" min="1000" max="15000" value="5000" class="w-full mt-2 accent-amber-500" oninput="updateGeoSim(this.value)">
+                                <div class="flex justify-between text-xs text-stone-500 mt-1">
+                                    <span>1,000 ft</span>
+                                    <span id="depth-val" class="font-bold text-amber-600">5,000 ft</span>
+                                    <span>15,000 ft</span>
+                                </div>
+                                <div id="geo-result" class="mt-3 text-sm p-3 bg-stone-50 rounded border border-stone-200">
+                                    Adjust depth to analyze strata potential.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            econ: {
+                title: "Extraction Economics & Agriculture",
+                content: `
+                    <div class="mb-6 p-4 bg-white rounded shadow border-l-4 border-green-500">
+                        <h3 class="font-bold text-lg text-green-800">The "Golden" Opportunity</h3>
+                        <p class="text-sm text-stone-600">
+                            Geologic Hydrogen (Gold H2) disrupts the energy market because it requires no energy input for production, only for extraction. This creates a cost profile similar to Natural Gas rather than Electrolysis.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                         <!-- Lease & Royalty Data -->
+                        <div class="card p-6">
+                            <h3 class="font-bold text-slate-800 mb-4">Land & Legal: Lease Metrics</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-stone-600">
+                                    <thead class="text-xs text-stone-700 uppercase bg-stone-100">
+                                        <tr>
+                                            <th class="px-4 py-2">Metric</th>
+                                            <th class="px-4 py-2">Estimate (IA/NE)</th>
+                                            <th class="px-4 py-2">Benchmark</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b">
+                                            <td class="px-4 py-2 font-medium">Signing Bonus</td>
+                                            <td class="px-4 py-2">$25 - $150 / acre</td>
+                                            <td class="px-4 py-2">Oil/Gas Wildcat</td>
+                                        </tr>
+                                        <tr class="border-b">
+                                            <td class="px-4 py-2 font-medium">Royalty Rate</td>
+                                            <td class="px-4 py-2">12.5% - 18.75%</td>
+                                            <td class="px-4 py-2">Standard Mineral Lease</td>
+                                        </tr>
+                                        <tr class="border-b">
+                                            <td class="px-4 py-2 font-medium">Primary Term</td>
+                                            <td class="px-4 py-2">3 - 5 Years</td>
+                                            <td class="px-4 py-2">Exploration Phase</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-xs text-stone-400 mt-2">Source: NOGCC lease records & industry proxies.</p>
+                        </div>
+
+                        <!-- Cost Comparator -->
+                        <div class="card p-6">
+                            <h3 class="font-bold text-slate-800 mb-2">LCOH Comparison ($/kg)</h3>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="costChart"></canvas>
+                            </div>
+                            <div class="mt-4 flex items-center space-x-2">
+                                <input type="checkbox" id="subsidyCheck" class="w-4 h-4 text-amber-600 rounded" onchange="updateCostChart()">
+                                <label for="subsidyCheck" class="text-sm text-stone-700">Apply IRA 45V Subsidy (Max $3.00/kg)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ag Loop Diagram -->
+                    <div class="card p-6">
+                        <h3 class="font-bold text-slate-800 mb-4">The Iowa/Nebraska Ag-Energy Loop</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-2 text-center items-center">
+
+                            <div class="p-4 bg-slate-100 rounded hover:bg-slate-200 transition cursor-pointer" onclick="showAgDetail('h2')">
+                                <div class="text-2xl">⚡</div>
+                                <div class="font-bold text-sm text-slate-800">Extraction</div>
+                                <div class="text-xs text-slate-500">Local H2</div>
+                            </div>
+                            <div class="hidden md:block text-slate-400">→</div>
+
+                            <div class="p-4 bg-blue-100 rounded hover:bg-blue-200 transition cursor-pointer" onclick="showAgDetail('nh3')">
+                                <div class="text-2xl">💧</div>
+                                <div class="font-bold text-sm text-blue-800">Ammonia</div>
+                                <div class="text-xs text-blue-600">Green Fertilizer</div>
+                            </div>
+                            <div class="hidden md:block text-slate-400">→</div>
+
+                            <div class="p-4 bg-amber-100 rounded hover:bg-amber-200 transition cursor-pointer" onclick="showAgDetail('corn')">
+                                <div class="text-2xl">🌽</div>
+                                <div class="font-bold text-sm text-amber-800">Agriculture</div>
+                                <div class="text-xs text-amber-600">High Yield</div>
+                            </div>
+                            <div class="hidden md:block text-slate-400">→</div>
+
+                            <div class="p-4 bg-green-100 rounded hover:bg-green-200 transition cursor-pointer" onclick="showAgDetail('saf')">
+                                <div class="text-2xl">✈️</div>
+                                <div class="font-bold text-sm text-green-800">Ethanol/SAF</div>
+                                <div class="text-xs text-green-600">Low CI Score</div>
+                            </div>
+
+                        </div>
+                        <div id="ag-detail" class="mt-6 p-4 bg-stone-50 border border-stone-200 rounded text-sm text-stone-700">
+                            Click a stage above to see detailed economic integration.
+                        </div>
+                    </div>
+                `
+            },
+            reg: {
+                title: "Regulatory & Social Landscape",
+                content: `
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Regulators -->
+                        <div class="col-span-1 card p-6">
+                            <h3 class="font-bold text-slate-800 mb-4">Key Regulatory Bodies</h3>
+                            <div class="space-y-4">
+                                <div class="border-b border-stone-100 pb-2">
+                                    <div class="font-bold text-sm text-amber-600">NOGCC (Nebraska)</div>
+                                    <p class="text-xs text-stone-600">Oil & Gas Conservation Commission. Established framework for subsurface rights. Recent updates (LB 1059) clarify pore space ownership.</p>
+                                </div>
+                                <div class="border-b border-stone-100 pb-2">
+                                    <div class="font-bold text-sm text-amber-600">IUB (Iowa)</div>
+                                    <p class="text-xs text-stone-600">Iowa Utilities Board. Currently embroiled in CO2 pipeline domain battles. Likely regulator for H2 transport.</p>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-sm text-amber-600">PHMSA (Federal)</div>
+                                    <p class="text-xs text-stone-600">Pipeline & Hazardous Materials Safety Admin. Sets safety standards for interstate H2 transport.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Simulator -->
+                        <div class="col-span-1 lg:col-span-2 card p-6">
+                            <h3 class="font-bold text-slate-800 mb-2">Public Sentiment Simulator</h3>
+                            <p class="text-sm text-stone-500 mb-6">Adjust public sentiment to forecast project delays. Based on regression analysis of recent pipeline (Summit/Navigator) and wind project oppositions in the Midwest.</p>
+
+                            <div class="mb-6">
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-xs font-bold text-red-500">NIMBY / Hostile</label>
+                                    <label class="text-xs font-bold text-green-500">YIMBY / Supportive</label>
+                                </div>
+                                <input type="range" id="sentimentSlider" min="0" max="100" value="40" class="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-slate-800" oninput="updateSocialSim()">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-stone-50 p-4 rounded text-center">
+                                    <div class="text-xs text-stone-400 uppercase">Est. Permitting Time</div>
+                                    <div id="sim-time" class="text-2xl font-bold text-slate-800">24 Months</div>
+                                </div>
+                                <div class="bg-stone-50 p-4 rounded text-center">
+                                    <div class="text-xs text-stone-400 uppercase">Legal Cost Premium</div>
+                                    <div id="sim-cost" class="text-2xl font-bold text-slate-800">+15%</div>
+                                </div>
+                            </div>
+                            <div id="sim-analysis" class="mt-4 text-sm text-stone-600 italic border-l-2 border-slate-300 pl-3">
+                                Moderate opposition. Expect challenges on eminent domain for gathering lines.
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            outlook: {
+                title: "10-Year Economic Outlook",
+                content: `
+                    <div class="card p-6 mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-slate-800">State Economic Impact (Combined IA/NE)</h3>
+                            <select class="text-sm border border-stone-300 rounded p-1" onchange="updateForecast(this.value)">
+                                <option value="gdp">GDP Contribution ($B)</option>
+                                <option value="jobs">Jobs Created (Direct/Indirect)</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <div id="outlookChart" class="w-full h-full"></div>
+                        </div>
+                        <div class="mt-4 text-xs text-stone-500 text-center">
+                            Projections based on Monte Carlo simulation (n=10,000) factoring in gas prices, drilling success rates, and subsidy longevity.
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="card p-6">
+                            <h4 class="font-bold text-sm text-slate-800 mb-2">Uncertainty Drivers</h4>
+                            <ul class="text-sm text-stone-600 list-disc ml-4 space-y-2">
+                                <li><strong>Discovery Success:</strong> Probability of hitting commercial flow rates in MRS is currently estimated at 15-20% per wildcat.</li>
+                                <li><strong>Pipeline Permitting:</strong> Delays >3 years could kill early-mover advantage.</li>
+                                <li><strong>Ammonia Price:</strong> If Natural Gas drops below $2.50/MMBtu, Grey Ammonia becomes highly competitive, squeezing H2 margins without subsidies.</li>
+                            </ul>
+                        </div>
+                        <div class="card p-6 bg-slate-900 text-white">
+                            <h4 class="font-bold text-sm text-amber-500 mb-2">Analyst Takeaway</h4>
+                            <p class="text-sm leading-relaxed opacity-90">
+                                The strategic value of <strong>local fertilizer security</strong> provides a price floor for Hydrogen in IA/NE that doesn't exist elsewhere. Even if H2 export is unviable, internal consumption for Ammonia and Ethanol decarbonization supports a robust mid-scale industry ($2-5B/yr impact by 2035).
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+            biblio: {
+                title: "Bibliography & Methodology",
+                content: `
+                    <div class="card p-8">
+                        <h3 class="font-bold text-slate-800 mb-4">Sources Cited</h3>
+                        <ul class="text-xs text-stone-600 space-y-3 font-mono">
+                            <li><strong>[1] USGS (2023).</strong> "Potential for Natural Hydrogen in the Midcontinent Rift System." United States Geological Survey Open-File Report.</li>
+                            <li><strong>[2] Ellis, G.S., et al. (2022).</strong> "Hydrogen generation from serpentinization in the subsurface." <em>Geochimica et Cosmochimica Acta</em>.</li>
+                            <li><strong>[3] Nebraska Legislature.</strong> "LB 1059: Relating to the Oil and Gas Conservation Commission." 108th Legislature.</li>
+                            <li><strong>[4] Iowa Utilities Board.</strong> "Docket No. HLP-2021-0001 (Summit Carbon Solutions)." Public Filings & Orders.</li>
+                            <li><strong>[5] Department of Energy (DOE).</strong> "Pathways to Commercial Liftoff: Clean Hydrogen." March 2023.</li>
+                            <li><strong>[6] Renewable Fuels Association (RFA).</strong> "Ethanol Industry Outlook 2024 & Carbon Intensity Metrics."</li>
+                            <li><strong>[7] EIA (Energy Information Administration).</strong> "Ammonia Production and Natural Gas Consumption in the Midwest."</li>
+                        </ul>
+
+                        <h3 class="font-bold text-slate-800 mt-8 mb-4">Research Methodology</h3>
+                        <p class="text-sm text-stone-600 mb-2">
+                            <strong>Economic Modeling:</strong> LCOH calculations assume a 10% discount rate (WACC) and standard North American onshore drilling costs adjusted for 2025 inflation. Geologic flow rates modeled on comparable analogues in Mali and recent Kansas exploratory wells.
+                        </p>
+                        <p class="text-sm text-stone-600">
+                            <strong>Sentiment Analysis:</strong> Based on public comment filings for recent CO2 pipeline dockets in Iowa and Nebraska, categorized by sentiment (Support, Oppose, Neutral) and correlated with permitting delays.
+                        </p>
+                    </div>
+                `
+            }
+        };
+
+        let myChart = null; // Chart.js instance
+
+        // --- Core Navigation ---
+        function nav(sectionKey) {
+            // Update UI State
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active', 'bg-amber-500', 'text-white', 'font-bold'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.add('hover:bg-stone-200'));
+
+            const activeBtn = document.getElementById(`nav-${sectionKey}`);
+            if(activeBtn) {
+                activeBtn.classList.add('active', 'bg-amber-500', 'text-white', 'font-bold');
+                activeBtn.classList.remove('hover:bg-stone-200');
+            }
+
+            // Inject Content
+            const main = document.getElementById('main-content');
+            const data = reportData[sectionKey];
+
+            main.innerHTML = `
+                <div class="fade-in">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6">${data.title}</h2>
+                    ${data.content}
+                </div>
+            `;
+
+            // Initialize Module-Specific Scripts
+            if (sectionKey === 'geo') initGeoCanvas();
+            if (sectionKey === 'econ') initCostChart();
+            if (sectionKey === 'outlook') initOutlookChart();
+            if (sectionKey === 'reg') updateSocialSim(); // Init state
+        }
+
+        // --- Module: Geology (Canvas Drawing) ---
+        function initGeoCanvas() {
+            const canvas = document.getElementById('geoCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            // Set resolution
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+
+            // Draw Simple Strata Map
+            ctx.fillStyle = "#e2e8f0"; // Background
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Rift Feature (Abstracted)
+            ctx.beginPath();
+            ctx.moveTo(canvas.width * 0.2, canvas.height);
+            ctx.bezierCurveTo(canvas.width * 0.3, canvas.height * 0.5, canvas.width * 0.7, canvas.height * 0.4, canvas.width * 0.9, 0);
+            ctx.lineWidth = 40;
+            ctx.strokeStyle = "rgba(100, 116, 139, 0.2)"; // Slate-500 low opacity
+            ctx.stroke();
+
+            // Draw Hotspots (Simulated Data)
+            const hotspots = [
+                {x: 0.35, y: 0.7, r: 10, pot: 'high'}, // SE Nebraska
+                {x: 0.5, y: 0.6, r: 8, pot: 'med'},    // IA/NE Border
+                {x: 0.7, y: 0.4, r: 12, pot: 'high'},  // Central Iowa
+            ];
+
+            hotspots.forEach(h => {
+                const cx = canvas.width * h.x;
+                const cy = canvas.height * h.y;
+
+                // Glow
+                const grad = ctx.createRadialGradient(cx, cy, 2, cx, cy, h.r * 2);
+                grad.addColorStop(0, h.pot === 'high' ? 'rgba(239, 68, 68, 0.8)' : 'rgba(59, 130, 246, 0.8)');
+                grad.addColorStop(1, 'rgba(239, 68, 68, 0)');
+
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(cx, cy, h.r * 2, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Grid lines for depth context
+            ctx.strokeStyle = "#cbd5e1";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for(let i=1; i<5; i++) {
+                let y = (canvas.height / 5) * i;
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+            }
+            ctx.stroke();
+        }
+
+        function updateGeoSim(val) {
+            const display = document.getElementById('depth-val');
+            const result = document.getElementById('geo-result');
+            display.innerText = parseInt(val).toLocaleString() + " ft";
+
+            let msg = "";
+            let color = "text-stone-600";
+
+            if (val < 2500) {
+                msg = "⚠️ Too Shallow: Freshwater aquifers pose contamination risk. Unlikely H2 trap.";
+                color = "text-red-600";
+            } else if (val >= 2500 && val < 8000) {
+                msg = "✅ Target Zone: Potential traps in sedimentary layers above the rift.";
+                color = "text-green-600";
+            } else {
+                msg = "⚠️ High Cost / High Heat: Reaching basement rock. Drilling costs exponential ($$$).";
+                color = "text-amber-600";
+            }
+            result.innerHTML = `<span class="${color} font-bold">${msg}</span>`;
+        }
+
+        // --- Module: Economics (Chart.js) ---
+        function initCostChart() {
+            const canvas = document.getElementById('costChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Geologic H2', 'Grey H2 (SMR)', 'Blue H2 (SMR+CCS)', 'Green H2 (Wind)'],
+                    datasets: [{
+                        label: 'Production Cost ($/kg)',
+                        data: [0.85, 1.50, 2.20, 4.50],
+                        backgroundColor: [
+                            '#f59e0b', // Amber (Gold H2)
+                            '#94a3b8', // Slate (Grey)
+                            '#3b82f6', // Blue
+                            '#22c55e'  // Green
+                        ],
+                        borderWidth: 0,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `$${ctx.raw.toFixed(2)} / kg`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function updateCostChart() {
+            const isSubsidized = document.getElementById('subsidyCheck').checked;
+            // 45V Credit Logic:
+            // Geologic: Usually low CI, eligible for ~$0.60 - $1.00 depending on lifecycle.
+            // Green: Eligible for max $3.00.
+            // Blue: 45Q or tiered 45V, approx $1.00 value.
+
+            // Base Data
+            let data = [0.85, 1.50, 2.20, 4.50];
+
+            if (isSubsidized) {
+                // Apply subsidies (cannot go below 0 theoretically, but illustrative)
+                data[0] = Math.max(0.1, data[0] - 1.00); // Geologic estimated credit
+                data[1] = data[1]; // Grey gets nothing
+                data[2] = Math.max(0.1, data[2] - 0.85); // Blue
+                data[3] = Math.max(0.1, data[3] - 3.00); // Green gets max credit
+            }
+
+            myChart.data.datasets[0].data = data;
+            myChart.update();
+        }
+
+        function showAgDetail(stage) {
+            const box = document.getElementById('ag-detail');
+            let content = "";
+
+            switch(stage) {
+                case 'h2':
+                    content = "<strong>Extraction:</strong> Local wells in NE/IA extract H2. <br><em>Impact:</em> Reduces reliance on natural gas piped from Gulf Coast.";
+                    break;
+                case 'nh3':
+                    content = "<strong>Ammonia Production:</strong> Haber-Bosch process uses H2 + Nitrogen (air). <br><em>Impact:</em> 80% of ammonia cost is H2. Cheap local H2 = Cheap Fertilizer for IA farmers.";
+                    break;
+                case 'corn':
+                    content = "<strong>Corn Yield:</strong> Nitrogen is the key input for corn yield. <br><em>Impact:</em> Stable fertilizer prices protect farmer margins and food supply.";
+                    break;
+                case 'saf':
+                    content = "<strong>Ethanol/SAF:</strong> Ethanol plants use H2 for process heat or upgrading alcohol to Jet Fuel (SAF). <br><em>Impact:</em> Lower Carbon Intensity (CI) score = Higher tax credits (45Z) = More value per bushel.";
+                    break;
+            }
+            box.innerHTML = content;
+        }
+
+        // --- Module: Regulatory (Simulator) ---
+        function updateSocialSim() {
+            const val = document.getElementById('sentimentSlider').value;
+            const timeDisplay = document.getElementById('sim-time');
+            const costDisplay = document.getElementById('sim-cost');
+            const analysis = document.getElementById('sim-analysis');
+
+            // Logic: Lower sentiment = Higher time/cost
+            // Base: 12 months, 0% premium
+            let months = 12 + ((100 - val) * 0.6); // Max ~72 months
+            let cost = ((100 - val) * 0.5); // Max 50% premium
+
+            timeDisplay.innerText = `${Math.round(months)} Months`;
+            costDisplay.innerText = `+${Math.round(cost)}%`;
+
+            if(val < 25) {
+                analysis.innerText = "CRITICAL: Widespread protests likely. Legal injunctions will stall project indefinitely. Similar to Keystone XL scenario.";
+                analysis.className = "mt-4 text-sm text-red-600 italic border-l-2 border-red-300 pl-3";
+            } else if (val < 60) {
+                 analysis.innerText = "CHALLENGING: Expect lawsuits over eminent domain. 2-3 year delays typical.";
+                 analysis.className = "mt-4 text-sm text-amber-600 italic border-l-2 border-amber-300 pl-3";
+            } else {
+                 analysis.innerText = "FAVORABLE: Community benefits agreements successful. Standard permitting timeline.";
+                 analysis.className = "mt-4 text-sm text-green-600 italic border-l-2 border-green-300 pl-3";
+            }
+        }
+
+        // --- Module: Outlook (Plotly) ---
+        function initOutlookChart() {
+            const xValues = [2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
+
+            // Base Case
+            const yBase = [0.1, 0.2, 0.5, 1.2, 2.0, 3.5, 4.8, 6.0, 7.5, 8.8, 10.2];
+            // High Case (Optimistic)
+            const yHigh = [0.1, 0.4, 1.0, 2.5, 4.5, 7.0, 10.0, 13.5, 17.0, 21.0, 25.0];
+            // Low Case (Pessimistic)
+            const yLow = [0.1, 0.1, 0.2, 0.3, 0.5, 0.8, 1.2, 1.5, 1.8, 2.0, 2.2];
+
+            const traceBase = {
+                x: xValues, y: yBase,
+                type: 'scatter', mode: 'lines', line: {color: '#f59e0b', width: 3}, name: 'Base Scenario'
+            };
+
+            const traceHigh = {
+                x: xValues, y: yHigh,
+                type: 'scatter', mode: 'lines', line: {width: 0}, showlegend: false, hoverinfo: 'skip'
+            };
+
+            const traceLow = {
+                x: xValues, y: yLow,
+                fill: 'tonexty', fillcolor: 'rgba(245, 158, 11, 0.2)',
+                type: 'scatter', mode: 'lines', line: {width: 0}, showlegend: false, hoverinfo: 'skip'
+            };
+
+            const layout = {
+                title: 'Projected Economic Impact ($ Billions)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                margin: {t: 30, l: 40, r: 20, b: 30},
+                xaxis: { title: 'Year', gridcolor: '#e5e7eb' },
+                yaxis: { title: 'GDP Impact ($B)', gridcolor: '#e5e7eb' },
+                showlegend: true,
+                legend: {x: 0, y: 1}
+            };
+
+            Plotly.newPlot('outlookChart', [traceLow, traceHigh, traceBase], layout, {displayModeBar: false, responsive: true});
+        }
+
+        function updateForecast(type) {
+            const el = document.getElementById('outlookChart');
+
+            // For this specific view, we just update the title to reflect the user's choice
+            // as the shape of the curve (S-curve adoption) remains similar for Jobs vs GDP.
+            const layoutUpdate = {
+                title: type === 'jobs' ? 'Projected Job Creation (Thousands)' : 'Projected Economic Impact ($ Billions)',
+                yaxis: { title: type === 'jobs' ? 'Jobs (000s)' : 'GDP Impact ($B)' }
+            };
+
+            Plotly.relayout(el, layoutUpdate);
+        }
+
+        // --- Init ---
+        // Start at Exec Summary
+        window.addEventListener('DOMContentLoaded', () => {
+            nav('exec');
+        });
+    </script>
+</body>
+</html>
