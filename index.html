@@ -13,7 +13,7 @@
         window.MathJax = {
             tex: { inlineMath: [['\\(', '\\)']] },
             startup: {
-                typeset: false // Disable automatic typesetting on startup
+                typeset: true // Enable automatic typesetting on startup
             }
         };
     </script>
@@ -439,6 +439,7 @@
                             <li><strong>[8] Post-OBBA Technical Report.</strong> <a href="https://drive.google.com/file/d/1dBKUcUEUS2EDnjhAeQyqoE7-83h00a0v/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
                             <li><strong>[9] Executive Slide Deck.</strong> <a href="https://drive.google.com/file/d/1KAqxyxrc6iW3W7e5b9XFgJncS4QRwy5q/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
                             <li><strong>[10] Supplementary Data & Projections.</strong> <a href="https://drive.google.com/file/d/1MhDCYweWjl2wB0fB6wRatT1J5tmb1Jnt/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[11] Regional Economic Impact Models.</strong> <a href="https://drive.google.com/file/d/1lnCSDMCbcOE-pr4Z2CSs_GKZbwd9ZWsl/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
                         </ul>
 
                         <h3 class="font-bold text-slate-800 mt-8 mb-4">Research Methodology</h3>
@@ -489,10 +490,8 @@
             `;
 
             // Tell MathJax to re-render formulas in the newly injected HTML
-            if (window.MathJax && window.MathJax.typesetPromise) {
-                MathJax.typesetPromise([main]).catch((err) => console.log(err.message));
-            } else if (window.MathJax && window.MathJax.typeset) {
-                 MathJax.typeset([main]);
+            if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+                window.MathJax.typesetPromise([main]).catch((err) => console.log(err.message));
             }
 
             // Initialize Module-Specific Scripts
@@ -682,10 +681,8 @@
             if(result) {
                 result.innerHTML = `<span class="${color} font-bold">${msg}</span>`;
                 // Re-render math inside the result string dynamically
-                if (window.MathJax && window.MathJax.typesetPromise) {
-                    MathJax.typesetPromise([result]).catch((err) => console.log(err.message));
-                } else if (window.MathJax && window.MathJax.typeset) {
-                     MathJax.typeset([result]);
+                if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+                    window.MathJax.typesetPromise([result]).catch((err) => console.log(err.message));
                 }
             }
 
@@ -862,11 +859,6 @@
         // Start at Exec Summary
         window.addEventListener('DOMContentLoaded', () => {
             nav('exec');
-            
-            // Optional: Re-render MathJax once after the entire page is loaded just to be safe
-            if (window.MathJax && window.MathJax.typesetPromise) {
-               window.MathJax.typesetPromise();
-            }
         });
 
     </script>
