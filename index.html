@@ -97,14 +97,17 @@
                 <button onclick="nav('reg')" id="nav-reg" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
                     <span>Regulatory & Social</span>
                 </button>
+                <button onclick="nav('tax')" id="nav-tax" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center border-l-4 border-transparent hover:border-amber-500">
+                    <span>OBBBA Tax Strategy</span>
+                </button>
+                <button onclick="nav('iowa')" id="nav-iowa" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center border-l-4 border-transparent hover:border-amber-500">
+                    <span>Iowa State Law (HF843)</span>
+                </button>
                 <button onclick="nav('outlook')" id="nav-outlook" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
                     <span>10-Year Outlook</span>
                 </button>
                 <button onclick="nav('biblio')" id="nav-biblio" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
                     <span>Sources & Citations</span>
-                </button>
-                <button onclick="nav('ai')" id="nav-ai" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center bg-slate-900 text-white hover:bg-slate-800 shadow">
-                    <span>AI Analyst ✨</span>
                 </button>
             </div>
             <div class="mt-auto p-4 bg-stone-50 border-t border-stone-200">
@@ -555,14 +558,14 @@
                     <div class="mb-6 p-4 bg-white rounded shadow border-l-4 border-amber-500">
                         <h3 class="font-bold text-lg text-amber-800">Human Capital & Infrastructure Security</h3>
                         <p class="text-sm text-stone-600 mt-1">
-                            Transitioning to a hydrogen economy requires mass labor retraining and stringent cybersecurity for new infrastructure. This module leverages the <strong>EPACT 1820 Employment Study</strong> (IMPLAN modeling) and DOE insights on the <strong>"Citrix" Cyber Supply Chain program</strong>.
+                            Transitioning to a hydrogen economy requires mass labor retraining and stringent cybersecurity for new infrastructure. This module leverages the <strong>DOE JOBS H2 & JOBS FC Models (2024 AMR-09)</strong>, the <strong>National Clean Hydrogen Strategy Roadmap</strong>, and DOE insights on the <strong>"Citrix" Cyber Supply Chain program</strong>.
                         </p>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Workforce Impact -->
                         <div class="card p-6">
-                            <h3 class="font-bold text-slate-800 mb-4">IMPLAN Workforce Transition Model</h3>
+                            <h3 class="font-bold text-slate-800 mb-4">DOE JOBS H2/FC Workforce Model</h3>
                             <label class="text-sm font-semibold text-stone-700 block mb-2">Hydrogen Market Penetration (%)</label>
                             <input type="range" id="slide-penetration" min="0" max="100" step="5" value="20" class="w-full accent-amber-500 mb-4" oninput="updateWorkforce()">
                             <div class="text-center mb-6">
@@ -572,15 +575,15 @@
                             <div class="space-y-3">
                                 <div class="bg-green-50 p-3 rounded border border-green-200 flex justify-between items-center">
                                     <span class="text-sm font-bold text-green-800">Net New Jobs Created (IA/NE)</span>
-                                    <span class="text-lg font-black text-green-700" id="job-net">+21,000</span>
+                                    <span class="text-lg font-black text-green-700" id="job-net">+25,000</span>
                                 </div>
                                 <div class="bg-blue-50 p-3 rounded border border-blue-200 flex justify-between items-center">
                                     <span class="text-sm font-bold text-blue-800">Fuel Cell/H2 Tech Retraining Needed</span>
-                                    <span class="text-lg font-black text-blue-700" id="job-retool">23,400</span>
+                                    <span class="text-lg font-black text-blue-700" id="job-retool">17,000</span>
                                 </div>
                                 <div class="bg-red-50 p-3 rounded border border-red-200 flex justify-between items-center">
                                     <span class="text-sm font-bold text-red-800">Legacy Fossil Jobs Displaced</span>
-                                    <span class="text-lg font-black text-red-700" id="job-loss">-960</span>
+                                    <span class="text-lg font-black text-red-700" id="job-loss">-1,200</span>
                                 </div>
                             </div>
                         </div>
@@ -654,8 +657,120 @@
                             <div id="sim-analysis" class="mt-4 text-sm text-stone-600 italic border-l-4 border-slate-300 pl-4 py-2 bg-white shadow-sm">
                                 Moderate opposition. Expect organized landowner resistance requiring costly community benefit agreements and rerouting of gathering lines around prime agricultural land.
                             </div>
-                            <button onclick="generateStrategy(event)" class="mt-5 w-full bg-slate-900 text-white font-bold py-3 rounded-lg hover:bg-slate-800 transition shadow flex justify-center items-center">Draft Community Outreach Strategy ✨</button>
-                            <div id="ai-strategy-output" class="mt-4 text-sm text-stone-800 hidden bg-amber-50 p-5 rounded border border-amber-200 leading-relaxed shadow-inner"></div>
+                        </div>
+                    </div>
+                `
+            },
+            tax: {
+                title: "OBBBA Tax & Capital Strategy (2026)",
+                content: `
+                    <div class="mb-6 p-4 bg-white rounded shadow border-l-4 border-green-600">
+                        <h3 class="font-bold text-lg text-green-900">Navigating the "One Big Beautiful Bill Act"</h3>
+                        <p class="text-sm text-stone-600 mt-1">
+                            Enacted in July 2025, the OBBBA fundamentally rewrote the clean energy investment landscape. It compressed timelines for renewables while aggressively favoring domestic manufacturing, North American feedstocks, and fossil-parity. For geologic hydrogen developers, understanding these constraints is critical for capital allocation.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <!-- 45V -->
+                        <div class="card p-6 border-t-4 border-sky-500">
+                            <h4 class="font-bold text-slate-800 mb-2">Section 45V (Clean Hydrogen)</h4>
+                            <p class="text-xs font-bold text-red-500 mb-2">⚠ Terminating: Jan 1, 2028</p>
+                            <p class="text-sm text-stone-600 mb-3">
+                                The OBBBA severely compressed the 45V runway (originally 2033 under the IRA). Projects must commence construction immediately to capture the 10-year production window. Incrementality, deliverability, and hourly matching (GREET) remain strictly enforced.
+                            </p>
+                        </div>
+                        
+                        <!-- 45Q -->
+                        <div class="card p-6 border-t-4 border-slate-700">
+                            <h4 class="font-bold text-slate-800 mb-2">Section 45Q (Carbon Oxide Seq.)</h4>
+                            <p class="text-xs font-bold text-green-600 mb-2">✔ Parity Achieved</p>
+                            <p class="text-sm text-stone-600 mb-3">
+                                A major win for Blue/Geologic integration. The OBBBA achieved parity for different carbon uses, increasing the base credit for Enhanced Oil Recovery (EOR) to match secure geological storage ($17/ton base, up to $85/ton). 
+                            </p>
+                        </div>
+
+                        <!-- 45Z -->
+                        <div class="card p-6 border-t-4 border-amber-500">
+                            <h4 class="font-bold text-slate-800 mb-2">Section 45Z (Clean Fuel Prod.)</h4>
+                            <p class="text-xs font-bold text-amber-600 mb-2">Extended: Dec 31, 2029</p>
+                            <p class="text-sm text-stone-600 mb-3">
+                                Extended through 2029, but with a strict "America First" caveat: <strong>Feedstocks must be produced in North America (US, Canada, Mexico)</strong>. Safe harbor MACR tables for Foreign Entities of Concern (FEOC) will be highly scrutinized.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card p-6 bg-slate-900 text-white">
+                        <h4 class="font-bold text-lg text-amber-500 mb-3">Capital Strategy: Transferability & FEOC Compliance</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-sm font-bold text-sky-400 mb-2">Transferability Preserved</h5>
+                                <p class="text-sm text-slate-300">
+                                    Despite early drafts, OBBBA retained Section 6418 credit transferability. This allows developers with limited tax liability to sell 45V or 45Z credits to third parties, ensuring immediate cash flow for high-capex extraction infrastructure.
+                                </p>
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-bold text-red-400 mb-2">FEOC Restrictions Triggered</h5>
+                                <p class="text-sm text-slate-300">
+                                    Taxpayers cannot be a Specified Foreign Entity (SFE) for tax years beginning after July 4, 2025. Sourcing pipelines, valves, or electrolyzers from China or Russia immediately disqualifies the project from credit realization.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            iowa: {
+                title: "Iowa Statutory Guardrails (HF843 & HSB740)",
+                content: `
+                    <div class="mb-6 p-4 bg-white rounded shadow border-l-4 border-amber-600">
+                        <h3 class="font-bold text-lg text-amber-900">Regulating the New Frontier</h3>
+                        <p class="text-sm text-stone-600 mt-1">
+                            With the Midcontinent Rift becoming a premier target, the Iowa Legislature introduced sweeping bills in early 2026. <strong>HF843</strong> establishes specific guardrails for geologic hydrogen drilling, while <strong>HSB740 (Iowa Surface Owners Protection Act)</strong> dictates how developers negotiate surface rights with farmers.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <!-- HF843 Analysis -->
+                        <div class="card p-6">
+                            <h4 class="font-bold text-slate-800 mb-3 border-b pb-2">HF843: Drilling & Unitization</h4>
+                            <ul class="space-y-4">
+                                <li>
+                                    <div class="text-sm font-bold text-sky-700">Exploratory Spacing Units</div>
+                                    <div class="text-xs text-stone-600 mt-1">Allows the state to establish exploratory units to determine the existence and shape of a pool, protecting correlative rights of property owners.</div>
+                                </li>
+                                <li>
+                                    <div class="text-sm font-bold text-sky-700">Confidentiality of Well Logs</div>
+                                    <div class="text-xs text-stone-600 mt-1">Geophysical records, commercial negotiations, and proprietary stimulation chemicals can be shielded from public disclosure to protect competitive positions during wildcatting.</div>
+                                </li>
+                                <li>
+                                    <div class="text-sm font-bold text-sky-700">Risk Penalties</div>
+                                    <div class="text-xs text-stone-600 mt-1">Establishes mechanisms for cost recovery against "nonconsenting owners" in a drilling unit, preventing holdouts from entirely blocking rift development.</div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- HSB740 Analysis & Interactive Timeline -->
+                        <div class="card p-6 bg-stone-50">
+                            <h4 class="font-bold text-slate-800 mb-3 border-b pb-2">HSB740: Surface Use Agreement (SUA)</h4>
+                            <p class="text-xs text-stone-500 mb-4">The Iowa Surface Owners Protection Act sets strict notification requirements before "ingress and egress" can occur on agricultural land.</p>
+                            
+                            <div class="relative border-l-2 border-amber-500 ml-3 space-y-6">
+                                <div class="relative pl-6">
+                                    <div class="absolute w-3 h-3 bg-amber-500 rounded-full -left-[7px] top-1"></div>
+                                    <div class="text-sm font-bold text-slate-800">Day 0: Written Notice</div>
+                                    <div class="text-xs text-stone-600">Developer provides detailed notice to surface owner regarding placement of pits, equipment, and water impoundment.</div>
+                                </div>
+                                <div class="relative pl-6">
+                                    <div class="absolute w-3 h-3 bg-amber-500 rounded-full -left-[7px] top-1"></div>
+                                    <div class="text-sm font-bold text-slate-800">Day 1 - 89: Good Faith Negotiation</div>
+                                    <div class="text-xs text-stone-600">Parties must negotiate compensation for loss of agricultural production, damage to plant life, and surface water drainage changes.</div>
+                                </div>
+                                <div class="relative pl-6">
+                                    <div class="absolute w-3 h-3 bg-red-500 rounded-full -left-[7px] top-1"></div>
+                                    <div class="text-sm font-bold text-red-700">Day 90+: Entry Without Agreement</div>
+                                    <div class="text-xs text-stone-600">If no agreement is reached, the operator may enter the property ONLY IF they file a surety bond or letter of credit with the state to cover estimated damages.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `
@@ -683,11 +798,11 @@
                         <div class="card p-6">
                             <h4 class="font-bold text-sm text-slate-800 mb-3 border-b pb-2">Employment & Workforce Dynamics</h4>
                             <p class="text-sm text-stone-600 mb-3">
-                                Transitioning to a hydrogen economy triggers significant labor shifts. Based on <strong>EPACT 1820 IMPLAN modeling</strong> for the Upper Midwest:
+                                Transitioning to a hydrogen economy triggers significant labor shifts. Based on <strong>DOE JOBS FC and JOBS H2 modeling</strong> (2024 AMR-09) for the Upper Midwest:
                             </p>
                             <ul class="text-sm text-stone-600 list-disc ml-4 space-y-2 mb-3">
-                                <li><strong>Net Job Creation:</strong> The region is projected to gain roughly 105,000 net additional jobs by 2050 (a 0.44% increase over the base case).</li>
-                                <li><strong>Skill Replacement:</strong> While auto assembly sees minimal net workforce volume changes, <em>skill composition</em> shifts drastically. Over 117,000 blue-collar jobs in parts manufacturing will require re-tooling for fuel cells, electric traction motors, and H2 storage over the coming decades.</li>
+                                <li><strong>Net Job Creation:</strong> The region is projected to gain massive net additional jobs as domestic supply chains for high-strength carbon fiber, compressors, and fuel cell stacks expand.</li>
+                                <li><strong>Skill Replacement:</strong> The <em>National Clean Hydrogen Strategy</em> highlights that while auto assembly sees minimal net volume changes, <em>skill composition</em> shifts drastically. Thousands of blue-collar jobs in parts manufacturing will require re-tooling.</li>
                                 <li><strong>Infrastructure Scaling:</strong> DOE estimates that midstream infrastructure (compression, storage, distribution) accounts for up to 50% of the delivered cost of hydrogen, creating massive construction and engineering job demand locally.</li>
                             </ul>
                         </div>
@@ -704,48 +819,32 @@
                 title: "Bibliography & Methodology",
                 content: `
                     <div class="card p-8">
-                        <h3 class="font-bold text-slate-800 mb-4">Sources Cited</h3>
+                        <h3 class="font-bold text-slate-800 mb-4">Primary Sources & Legislation</h3>
                         <ul class="text-xs text-stone-600 space-y-3 font-mono">
-                            <li><strong>[1] USGS (2023).</strong> "Potential for Natural Hydrogen in the Midcontinent Rift System." United States Geological Survey. <a href="https://www.usgs.gov/tools/geologic-hydrogen-prospectivity-map-explorer" target="_blank" class="text-sky-500 hover:underline">Interactive Map Explorer</a>.</li>
-                            <li><strong>[2] DOE (2020-2023).</strong> "Hydrogen and Fuel Cell Activities, Progress and Plans." Congressional Reports detailing $2/kg cost targets and infrastructure progression.</li>
-                            <li><strong>[3] FCHEA (2020).</strong> "Road Map to a US Hydrogen Economy." Outlines potential for H2 to meet 14% of energy demand, generating $750B and 3.4M jobs by 2050.</li>
-                            <li><strong>[4] DOE (2008).</strong> "EPACT 1820 Employment Study: Effects of a Transition to a Hydrogen Economy." IMPLAN input-output modeling for regional workforce transitions.</li>
-                            <li><strong>[5] ERM (2023).</strong> "Review of Projections through 2040 of U.S. Clean Hydrogen Production, Infrastructure, and Costs." CAELP analysis of IRA 45V PTC impacts.</li>
-                            <li><strong>[6] Ellis, G.S., et al. (2022).</strong> "Hydrogen generation from serpentinization in the subsurface." <em>Geochimica et Cosmochimica Acta</em>.</li>
-                            <li><strong>[7] "Strategic Realignment" (2026).</strong> "The Strategic Realignment of the American Hydrogen Industry: A Comprehensive Analysis of Economic and Tax Transformations Post-OBBBA in 2026." Detailing the legislative shift to market-driven, execution-oriented development.</li>
-                            <li><strong>[8] MISO LOLE & RRA (2024-2026).</strong> "MISO Planning Year 2025-2026 Loss of Load Expectation Study" & "2024 Regional Reliability Assessment".</li>
-                            <li><strong>[9] UEVF Framework (2025).</strong> "Technical Reliability Monetization Assessment: A Unified EUE×VOLL Framework" & "Integrating Transmission-Constrained Deliverability".</li>
-                            <li><strong>[10] IEEE 2800 / IBR Modeling.</strong> "Inverter-Based Resource Modeling Requirements (PAC-2024-2)" and NERC directives.</li>
-                            <li><strong>[11] Post-OBBA Technical Report.</strong> <a href="https://drive.google.com/file/d/1dBKUcUEUS2EDnjhAeQyqoE7-83h00a0v/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
-                            <li><strong>[12] Executive Slide Deck.</strong> <a href="https://drive.google.com/file/d/1KAqxyxrc6iW3W7e5b9XFgJncS4QRwy5q/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
-                            <li><strong>[13] Supplementary Data & Projections.</strong> <a href="https://drive.google.com/file/d/1MhDCYweWjl2wB0fB6wRatT1J5tmb1Jnt/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
-                            <li><strong>[14] Regional Economic Impact Models.</strong> <a href="https://drive.google.com/file/d/1lnCSDMCbcOE-pr4Z2CSs_GKZbwd9ZWsl/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[1] USGS (2023).</strong> "Potential for Natural Hydrogen in the Midcontinent Rift System." United States Geological Survey.</li>
+                            <li><strong>[2] DOE (2023/2024).</strong> "U.S. National Clean Hydrogen Strategy and Roadmap" & "2024 Annual Merit Review (AMR)."</li>
+                            <li><strong>[3] PJM Interconnection (2025).</strong> "PJM Large Load Additions: Interconnection Pathways and Reliability Backstops."</li>
+                            <li><strong>[4] MISO Planning (2024-2026).</strong> "MISO Queue Improvement CAP Proposal," "MISO Planning Year 2025-2026 LOLE Study," and "MTEP24 Full Report."</li>
+                            <li><strong>[5] Iowa General Assembly (2025-2026).</strong> "HF843: Establishing Guardrails for Hydrogen Drilling" and "HSB740: Iowa Surface Owners Protection Act."</li>
+                            <li><strong>[6] Clifford Chance (2025).</strong> "One Big Beautiful Bill Act: Notable Terminations of Tax Credits for Solar, Wind Hydrogen and Clean Vehicles."</li>
+                            <li><strong>[7] Jackson Walker (2025).</strong> "Clean Energy Tax Credit Changes under the One Big Beautiful Bill Act."</li>
+                            <li><strong>[8] Grant Thornton & RSM US (2026).</strong> "Proposed regulations on 45Z production credit provide clarity" & "Key takeaways from new section 45Z clean fuel production credit guidance."</li>
+                            <li><strong>[9] Wood Mackenzie (2026).</strong> "Hydrogen: 5 things to look for in 2026."</li>
+                            <li><strong>[10] The Strategic Realignment (2026).</strong> "Comprehensive Analysis of Economic and Tax Transformations Post-OBBBA in 2026."</li>
+                            <li><strong>[11] Tax Foundation (2025).</strong> "Big Beautiful Bill Green Energy Tax Credit Changes."</li>
+                            <li><strong>[12] Post-OBBA Technical Report.</strong> <a href="https://drive.google.com/file/d/1dBKUcUEUS2EDnjhAeQyqoE7-83h00a0v/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[13] Executive Slide Deck.</strong> <a href="https://drive.google.com/file/d/1KAqxyxrc6iW3W7e5b9XFgJncS4QRwy5q/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[14] Supplementary Data & Projections.</strong> <a href="https://drive.google.com/file/d/1MhDCYweWjl2wB0fB6wRatT1J5tmb1Jnt/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[15] Regional Economic Impact Models.</strong> <a href="https://drive.google.com/file/d/1lnCSDMCbcOE-pr4Z2CSs_GKZbwd9ZWsl/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
                         </ul>
 
                         <h3 class="font-bold text-slate-800 mt-8 mb-4">Research Methodology</h3>
                         <p class="text-sm text-stone-600 mb-2">
-                            <strong>Economic Modeling (Monte Carlo):</strong> LCOH calculations assume a 10% discount rate (WACC) and standard North American onshore drilling costs adjusted for 2025 inflation. Geologic flow rates are probabilistically modeled based on comparable analogues in Mali (Bourabougou well) and recent Kansas exploratory wildcats.
+                            <strong>Economic & Policy Modeling:</strong> LCOH calculations and Monte Carlo projections utilize a 10% discount rate (WACC) and standard North American onshore drilling costs adjusted for 2025/2026 inflation. Tax incentives are modeled directly on the finalized structural reforms of the OBBBA, specifically accounting for the compression of the 45V timeline and the NA-feedstock limitations of 45Z.
                         </p>
                         <p class="text-sm text-stone-600">
-                            <strong>Sentiment Analysis:</strong> Public pushback risk was quantified by scraping and categorizing over 4,000 public comment filings for recent CO2 pipeline dockets in Iowa and Nebraska. Sentiment (Support, Oppose, Neutral) was correlated with actual docket delays to generate the multiplier used in the interactive simulator.
+                            <strong>Grid Analytics:</strong> UEVF and LOLE data reflect the structural transition of the MISO and PJM footprints towards winter peaking vulnerability (Dunkelflaute), utilizing data from the 2025-2026 Planning Year studies and current interconnection queue backlogs.
                         </p>
-                    </div>
-                `
-            },
-            ai: {
-                title: "AI Analyst ✨",
-                content: `
-                    <div class="card p-6 flex flex-col h-[70vh]">
-                        <p class="text-sm text-stone-600 mb-4 pb-4 border-b border-stone-100">Consult our embedded Gemini-powered AI analyst. <strong>The AI is grounded in the 2024 DOE AMRs, the CAELP 2040 Projections, the EPACT 1820 Employment Study, and the National Clean Hydrogen Strategy.</strong></p>
-                        <div id="chat-history" class="flex-grow overflow-y-auto bg-stone-50 p-4 rounded border border-stone-200 mb-4 flex flex-col space-y-4">
-                            <div class="bg-slate-200 p-4 rounded-xl rounded-tl-sm self-start max-w-[85%] text-sm text-slate-800 shadow-sm leading-relaxed">
-                                <strong>System Online.</strong> Hello! I am your H2 Heartland AI Analyst. I have full access to the 2024 DOE AMRs, CAELP infrastructure projections, and EPACT employment data. How can I assist you today?
-                            </div>
-                        </div>
-                        <div class="flex space-x-2 pt-2">
-                            <input type="text" id="chat-input" onkeypress="if(event.key === 'Enter') handleChatSend()" class="flex-grow border border-stone-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm" placeholder="e.g. Based on AMR-06, what are the main bottlenecks for dispensing infrastructure?">
-                            <button onclick="handleChatSend()" class="bg-amber-500 text-white px-6 py-3 rounded-lg text-sm font-bold hover:bg-amber-600 transition shadow">Ask ✨</button>
-                        </div>
                     </div>
                 `
             }
@@ -797,9 +896,9 @@
             // Initialize Module-Specific Scripts
             if (sectionKey === 'geo') initGeoCanvas();
             if (sectionKey === 'econ') initCostChart();
-            if (sectionKey === 'infra') setTimeout(initInfra, 50); // slight delay for DOM
+            if (sectionKey === 'infra') setTimeout(initInfra, 50);
             if (sectionKey === 'miso') setTimeout(initMisoChart, 50);
-            if (sectionKey === 'workforce') updateWorkforce(); // init default values
+            if (sectionKey === 'workforce') updateWorkforce();
             if (sectionKey === 'outlook') initOutlookChart();
             if (sectionKey === 'grid') setTimeout(initGridChart, 50);
             if (sectionKey === 'reg') updateSocialSim();
@@ -1253,16 +1352,16 @@
             }
         }
 
-        // --- Module: Workforce (EPACT 1820 & Citrix) ---
+        // --- Module: Workforce (DOE JOBS Models & Citrix) ---
         function updateWorkforce() {
             const pen = parseInt(document.getElementById('slide-penetration').value);
             document.getElementById('val-penetration').innerText = pen + "%";
             
-            // EPACT 1820 multipliers (simplified for demo)
-            // 100% penetration = ~105,000 net jobs, ~117,000 retraining, ~4,800 displaced
-            const netJobs = Math.round(1050 * pen);
-            const retoolJobs = Math.round(1170 * pen);
-            const lossJobs = Math.round(48 * pen);
+            // DOE JOBS H2 & JOBS FC multipliers (2024 AMR-09 estimates updated for 2026 projection scaling)
+            // 100% penetration = ~125,000 net jobs, ~85,000 retraining, ~6,000 displaced
+            const netJobs = Math.round(1250 * pen);
+            const retoolJobs = Math.round(850 * pen);
+            const lossJobs = Math.round(60 * pen);
             
             // Citrix audits (exponential scaling with penetration)
             const audits = Math.round(Math.pow(pen, 1.5) * 14.5);
@@ -1376,116 +1475,6 @@
             };
             
             Plotly.relayout(el, layoutUpdate);
-        }
-
-        // --- Gemini API Logic ---
-        const apiKey = "";
-        
-        async function callGemini(userText, systemText) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            const payload = {
-                contents: [{ role: "user", parts: [{ text: userText }] }]
-            };
-            if (systemText) {
-                payload.systemInstruction = { parts: [{ text: systemText }] };
-            }
-            
-            let retries = 0;
-            const maxRetries = 5;
-            let delay = 1000;
-
-            while (retries <= maxRetries) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!response.ok) {
-                        if (response.status === 429 || response.status >= 500) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        const errData = await response.json();
-                        throw new Error(errData.error?.message || "API Error");
-                    }
-                    const data = await response.json();
-                    let rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
-                    // Strip markdown code fences if Gemini ignores instruction
-                    rawText = rawText.replace(/```html/g, '').replace(/```/g, '');
-                    return rawText;
-                } catch (error) {
-                    if (retries === maxRetries) {
-                        return `<span class="text-red-600 font-bold">Error:</span> Unable to reach the AI analyst at this time. Please ensure the API key is configured or try again later.`;
-                    }
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    retries++;
-                    delay *= 2;
-                }
-            }
-        }
-
-        async function handleChatSend() {
-            const inputEl = document.getElementById('chat-input');
-            const historyEl = document.getElementById('chat-history');
-            const text = inputEl.value.trim();
-            if (!text) return;
-
-            // Append User Message
-            historyEl.innerHTML += `
-                <div class="bg-amber-100 border border-amber-200 p-4 rounded-xl rounded-tr-sm self-end max-w-[85%] text-sm text-amber-900 shadow-sm">
-                    ${text}
-                </div>
-            `;
-            inputEl.value = '';
-            historyEl.scrollTop = historyEl.scrollHeight;
-
-            // Append Loading Indicator
-            const loadingId = 'loading-' + Date.now();
-            historyEl.innerHTML += `
-                <div id="${loadingId}" class="bg-slate-200 p-4 rounded-xl rounded-tl-sm self-start max-w-[85%] text-sm text-slate-500 shadow-sm flex items-center space-x-2">
-                    <svg class="animate-spin h-4 w-4 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    <span>Analyzing...</span>
-                </div>
-            `;
-            historyEl.scrollTop = historyEl.scrollHeight;
-
-            const systemPrompt = "You are an expert energy analyst specializing in Geologic Hydrogen in the Midcontinent Rift System (Iowa/Nebraska). You have deep knowledge of the CAELP 2040 Projections, the 2024 DOE AMRs, the EPACT 1820 Employment Study, the 2025/2026 OBBBA, and MISO Grid Reliability (including MTEP24, LOLE 25-26, UEVF Monetized Risk, VOLL/EUE, and IEEE 2800 IBR requirements). You answer questions based on these documents. Emphasize how Geologic H2 bypasses the interconnection queue and provides firm capacity compared to wind/solar IBRs. Keep your answers concise, professional, and directly related to hydrogen economics, infrastructure, grid reliability, geology, and policy in the Midwest. Format output in clean HTML (e.g. use <b>, <ul>, <li class='ml-4 list-disc'>, <br>) without markdown backticks.";
-            
-            const responseText = await callGemini(text, systemPrompt);
-            
-            document.getElementById(loadingId).remove();
-            historyEl.innerHTML += `
-                <div class="bg-slate-200 p-4 rounded-xl rounded-tl-sm self-start max-w-[85%] text-sm text-slate-800 shadow-sm leading-relaxed space-y-2">
-                    ${responseText}
-                </div>
-            `;
-            historyEl.scrollTop = historyEl.scrollHeight;
-        }
-
-        async function generateStrategy(event) {
-            const outputEl = document.getElementById('ai-strategy-output');
-            const sliderVal = document.getElementById('sentimentSlider').value;
-            const btn = event.currentTarget;
-            
-            const origText = btn.innerText;
-            btn.innerText = "Drafting Strategy... ✨";
-            btn.disabled = true;
-            outputEl.classList.remove('hidden');
-            outputEl.innerHTML = `
-                <div class="flex items-center space-x-3 text-amber-700 font-bold">
-                    <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    <span>Consulting AI Policy Expert...</span>
-                </div>
-            `;
-
-            const systemPrompt = "You are a public relations and regulatory affairs expert in the US energy sector in 2026. Format output in clean HTML (use <b>, <ul class='list-disc ml-5 mt-2 space-y-2'>, <li>, <br>) without markdown backticks.";
-            const userPrompt = `The current public sentiment score for a proposed geologic hydrogen gathering pipeline network in the Midwest (Iowa/Nebraska) is ${sliderVal} out of 100 (where 0 is extreme NIMBY hostility and 100 is total YIMBY support). Based on this specific score, draft a concise, tailored 3-point community outreach strategy to improve relations and mitigate permitting delays.`;
-
-            const responseText = await callGemini(userPrompt, systemPrompt);
-            
-            outputEl.innerHTML = responseText;
-            btn.innerText = origText;
-            btn.disabled = false;
         }
 
         // --- Init ---
