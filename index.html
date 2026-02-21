@@ -80,7 +80,16 @@
                     <span>Geology & Purity</span>
                 </button>
                 <button onclick="nav('econ')" id="nav-econ" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
-                    <span>Economics & Ag</span>
+                    <span>Economics & GREET</span>
+                </button>
+                <button onclick="nav('infra')" id="nav-infra" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center border-l-4 border-transparent hover:border-amber-500">
+                    <span>Midstream & I-80</span>
+                </button>
+                <button onclick="nav('grid')" id="nav-grid" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center border-l-4 border-transparent hover:border-amber-500">
+                    <span>Grid & Wind</span>
+                </button>
+                <button onclick="nav('workforce')" id="nav-workforce" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center border-l-4 border-transparent hover:border-amber-500">
+                    <span>Workforce & Cyber</span>
                 </button>
                 <button onclick="nav('reg')" id="nav-reg" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
                     <span>Regulatory & Social</span>
@@ -90,6 +99,9 @@
                 </button>
                 <button onclick="nav('biblio')" id="nav-biblio" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center">
                     <span>Sources & Citations</span>
+                </button>
+                <button onclick="nav('ai')" id="nav-ai" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center bg-slate-900 text-white hover:bg-slate-800 shadow">
+                    <span>AI Analyst ✨</span>
                 </button>
             </div>
             <div class="mt-auto p-4 bg-stone-50 border-t border-stone-200">
@@ -230,60 +242,56 @@
                 `
             },
             econ: {
-                title: "Extraction Economics & Agriculture",
+                title: "Advanced Economics & GREET Calculator",
                 content: `
                     <div class="mb-6 p-4 bg-white rounded shadow border-l-4 border-green-500">
-                        <h3 class="font-bold text-lg text-green-800">Market Disruption: Eliminating the Energy Penalty</h3>
+                        <h3 class="font-bold text-lg text-green-800">The "Golden" Opportunity vs. Subsidized Pathways</h3>
                         <p class="text-sm text-stone-600 mt-1">
-                            "Green" hydrogen requires ~50 kWh of electricity to produce 1 kg of H2. At $0.05/kWh, electricity alone costs $2.50/kg before capital expenditures. Geologic hydrogen skips the manufacturing phase entirely. The energy is already stored in the earth. The only costs are drilling, extraction, and separation—mirroring the highly optimized economics of the natural gas industry.
+                            Geologic Hydrogen skips the manufacturing phase entirely. However, to evaluate the true competitive landscape under the 2026 OBBBA, we must model the precise 45V and 45Q tax credits using the <strong>Argonne GREET model (referenced in 2024 AMR-09)</strong>.
                         </p>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                         <!-- Lease & Royalty Data -->
+                         <!-- GREET Interactive Sliders -->
                         <div class="card p-6">
-                            <h3 class="font-bold text-slate-800 mb-4">Land & Legal: Lease Metrics</h3>
-                            <div class="overflow-x-auto mb-4">
-                                <table class="w-full text-sm text-left text-stone-600">
-                                    <thead class="text-xs text-stone-700 uppercase bg-stone-100">
-                                        <tr>
-                                            <th class="px-4 py-2">Metric</th>
-                                            <th class="px-4 py-2">Current IA/NE Range</th>
-                                            <th class="px-4 py-2">Context</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="border-b">
-                                            <td class="px-4 py-2 font-medium">Signing Bonus</td>
-                                            <td class="px-4 py-2">$25 - $150 / acre</td>
-                                            <td class="px-4 py-2">Low compared to prime Permian oil ($1,000+), reflecting high exploration risk ("wildcatting").</td>
-                                        </tr>
-                                        <tr class="border-b">
-                                            <td class="px-4 py-2 font-medium">Royalty Rate</td>
-                                            <td class="px-4 py-2">12.5% - 18.75%</td>
-                                            <td class="px-4 py-2">Standard 1/8th to 3/16th mineral lease rates are being universally adopted for H2.</td>
-                                        </tr>
-                                        <tr class="border-b">
-                                            <td class="px-4 py-2 font-medium">Primary Term</td>
-                                            <td class="px-4 py-2">3 - 5 Years</td>
-                                            <td class="px-4 py-2">Provides operators a short window to prove reserves before renewing.</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <h3 class="font-bold text-slate-800 mb-4">Carbon Intensity (CI) & Subsidies</h3>
+                            <div class="space-y-5">
+                                <div>
+                                    <div class="flex justify-between text-sm font-semibold text-stone-700">
+                                        <label>Grid CI ($\\text{kg CO}_2\\text{e / kg H}_2$)</label>
+                                        <span id="val-gridci" class="text-amber-600">0.40</span>
+                                    </div>
+                                    <input type="range" id="slide-gridci" min="0" max="5" step="0.1" value="0.4" class="w-full accent-amber-500" oninput="updateCostChart()">
+                                    <p class="text-xs text-stone-400 mt-1">Impacts Green H2 45V Tier (Incrementality/Temporal matching active).</p>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm font-semibold text-stone-700">
+                                        <label>Carbon Capture Rate (%)</label>
+                                        <span id="val-capture" class="text-blue-600">95%</span>
+                                    </div>
+                                    <input type="range" id="slide-capture" min="50" max="99" step="1" value="95" class="w-full accent-blue-500" oninput="updateCostChart()">
+                                    <p class="text-xs text-stone-400 mt-1">Impacts Blue H2 45Q parity rate under OBBBA.</p>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm font-semibold text-stone-700">
+                                        <label>Methane Leakage (%)</label>
+                                        <span id="val-leakage" class="text-slate-600">1.0%</span>
+                                    </div>
+                                    <input type="range" id="slide-leakage" min="0" max="3" step="0.1" value="1.0" class="w-full accent-slate-500" oninput="updateCostChart()">
+                                    <p class="text-xs text-stone-400 mt-1">Upstream emissions penalize Blue/Grey H2 CI scores.</p>
+                                </div>
                             </div>
-                            <p class="text-xs text-stone-500"><strong>Insight:</strong> Landowners in these states are largely unfamiliar with mineral leasing compared to Texas or North Dakota. Education on "severed mineral rights" vs. surface rights is a major hurdle for landmen.</p>
                         </div>
 
                         <!-- Cost Comparator -->
                         <div class="card p-6">
-                            <h3 class="font-bold text-slate-800 mb-2">LCOH Comparison ($/kg)</h3>
-                            <p class="text-xs text-stone-500 mb-4">Levelized Cost of Hydrogen. Note the impact of the federal subsidies (45V PTC) and 2026 OBBBA changes. The OBBBA's compressed tax-credit runway and strict "Three Pillars" compliance creates extreme pressure on Green H2, while Blue H2 benefits from 45Q parity. Geologic H2 achieves sub-$1/kg base costs <em>without</em> requiring complex grid matching or massive new surface renewable buildouts.</p>
+                            <h3 class="font-bold text-slate-800 mb-2">Net LCOH Comparison ($/kg)</h3>
+                            <p class="text-xs text-stone-500 mb-4">Calculated net cost after applying specific 45V/45Q subsidies based on the GREET parameters mapped to the left.</p>
                             <div class="chart-container" style="height: 200px;">
                                 <canvas id="costChart"></canvas>
                             </div>
-                            <div class="mt-4 flex items-center space-x-2 bg-amber-50 p-2 rounded border border-amber-200">
-                                <input type="checkbox" id="subsidyCheck" class="w-4 h-4 text-amber-600 rounded" onchange="updateCostChart()">
-                                <label for="subsidyCheck" class="text-sm font-semibold text-amber-900">Apply 45V/45Q Subsidy Scenario (OBBBA Compressed Runway)</label>
+                            <div id="credit-status" class="mt-4 text-xs font-bold text-center p-2 rounded bg-stone-100">
+                                45V Credit: $3.00/kg | 45Q Credit: $0.81/kg
                             </div>
                         </div>
                     </div>
@@ -324,6 +332,177 @@
                         </div>
                         <div id="ag-detail" class="mt-6 p-5 bg-stone-50 border border-stone-200 rounded text-sm text-stone-700 shadow-inner min-h-[120px]">
                             <em>Select a stage above to explore the detailed economic and regulatory integration of this circular economy.</em>
+                        </div>
+                    </div>
+                `
+            },
+            infra: {
+                title: "Midstream Infrastructure & Freight",
+                content: `
+                    <div class="mb-6 p-4 bg-white rounded shadow border-l-4 border-slate-700">
+                        <h3 class="font-bold text-lg text-slate-800">The I-80 Freight Corridor Logistics</h3>
+                        <p class="text-sm text-stone-600 mt-1">
+                            Based on the <strong>CAELP/ERM 2040 Projections</strong> and <strong>2024 AMR-06 (Infrastructure)</strong>, extraction is only half the battle. Delivering geologic hydrogen to heavy-duty (Class 8) trucking networks along the I-80 corridor (cutting through IA/NE) dictates the final dispensed cost.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="card p-6">
+                            <h3 class="font-bold text-slate-800 mb-4">I-80 Station Network Simulator</h3>
+                            
+                            <!-- Conceptual Map Graphic -->
+                            <div class="w-full h-24 bg-stone-200 rounded-lg mb-6 relative flex items-center justify-between px-4 overflow-hidden border border-stone-300">
+                                <div class="absolute inset-0 flex items-center justify-center opacity-20 text-4xl font-black text-stone-400">INTERSTATE 80</div>
+                                <div class="w-full h-2 bg-slate-800 absolute top-1/2 transform -translate-y-1/2"></div>
+                                <div class="flex justify-between w-full z-10" id="station-markers">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+
+                            <label class="text-sm font-semibold text-stone-700 block mb-2">Class 8 H2 Fueling Stations to Deploy (1,000 kg/day each)</label>
+                            <input type="range" id="slide-stations" min="1" max="50" step="1" value="10" class="w-full accent-amber-500 mb-2" oninput="updateInfra()">
+                            <div class="flex justify-between text-xs text-stone-500 font-bold">
+                                <span>1 Station</span>
+                                <span id="val-stations" class="text-amber-600 text-lg">10 Stations</span>
+                                <span>50 Stations</span>
+                            </div>
+                            
+                            <div class="mt-6 p-4 bg-stone-50 rounded border border-stone-200">
+                                <p class="text-xs text-stone-500 uppercase tracking-wide">Daily Corridor Demand</p>
+                                <p class="text-2xl font-bold text-slate-800" id="val-demand">10,000 kg/day</p>
+                            </div>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="font-bold text-slate-800 mb-4">Delivery Modality CAPEX / OPEX</h3>
+                            <p class="text-xs text-stone-500 mb-4">Modeled costs for distributing extracted Geologic H2 to the selected I-80 stations.</p>
+                            
+                            <div class="space-y-4">
+                                <!-- Pipeline -->
+                                <div class="p-3 border border-slate-200 rounded">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <h4 class="text-sm font-bold text-slate-700">Dedicated Pipeline</h4>
+                                        <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded">Best for High Volume</span>
+                                    </div>
+                                    <div class="w-full bg-stone-200 rounded-full h-2.5 mb-2"><div id="bar-pipe" class="bg-slate-700 h-2.5 rounded-full" style="width: 80%"></div></div>
+                                    <div class="flex justify-between text-xs text-stone-600">
+                                        <span id="capex-pipe">Capex: $520M</span>
+                                        <span>Opex: Very Low ($0.50/kg)</span>
+                                    </div>
+                                </div>
+                                <!-- Liquid -->
+                                <div class="p-3 border border-slate-200 rounded">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <h4 class="text-sm font-bold text-slate-700">Liquid Cryo Trucks</h4>
+                                        <span class="text-xs px-2 py-1 bg-amber-100 text-amber-800 rounded">Best for Long Distance</span>
+                                    </div>
+                                    <div class="w-full bg-stone-200 rounded-full h-2.5 mb-2"><div id="bar-liquid" class="bg-amber-500 h-2.5 rounded-full" style="width: 40%"></div></div>
+                                    <div class="flex justify-between text-xs text-stone-600">
+                                        <span id="capex-liquid">Capex: $90M</span>
+                                        <span>Opex: High ($2.50/kg)</span>
+                                    </div>
+                                </div>
+                                <!-- Gaseous -->
+                                <div class="p-3 border border-slate-200 rounded">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <h4 class="text-sm font-bold text-slate-700">Gaseous Tube Trailers</h4>
+                                        <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">Best for Early Adoption</span>
+                                    </div>
+                                    <div class="w-full bg-stone-200 rounded-full h-2.5 mb-2"><div id="bar-gas" class="bg-blue-500 h-2.5 rounded-full" style="width: 20%"></div></div>
+                                    <div class="flex justify-between text-xs text-stone-600">
+                                        <span id="capex-gas">Capex: $30M</span>
+                                        <span>Opex: Very High ($3.50/kg)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            grid: {
+                title: "Grid Integration & Wind Curtailment",
+                content: `
+                    <div class="mb-6 p-4 bg-white rounded shadow border-l-4 border-blue-500">
+                        <h3 class="font-bold text-lg text-blue-800">The Electrolytic Competitor: Iowa Wind</h3>
+                        <p class="text-sm text-stone-600 mt-1">
+                            Iowa is a national leader in wind energy. As highlighted in the <strong>National Clean Hydrogen Strategy Roadmap</strong> and <strong>2024 AMR-08 (Systems Integration)</strong>, using curtailed (excess) wind power can drastically lower the cost of Green H2. This module compares locally extracted Geologic H2 against Electrolytic H2 powered by varying levels of wind capacity factor.
+                        </p>
+                    </div>
+                    <div class="card p-6 mb-6">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-800">LCOH: Geologic vs. Wind-Electrolysis</h3>
+                                <p class="text-xs text-stone-500">Cost per kg plotted against the Capacity Factor of a dedicated wind farm.</p>
+                            </div>
+                        </div>
+                        <div class="chart-container" style="height: 350px;">
+                            <div id="gridChart" class="w-full h-full"></div>
+                        </div>
+                        <div class="mt-6 p-4 bg-stone-50 border border-stone-200 rounded">
+                            <label class="text-sm font-semibold text-stone-700 block mb-2">Simulate Local Wind Capacity Factor (%)</label>
+                            <input type="range" id="slide-wind" min="10" max="70" step="1" value="40" class="w-full accent-blue-500" oninput="updateGridSim()">
+                            <div class="flex justify-between text-xs text-stone-500 mt-1 font-bold">
+                                <span>10% (Low Yield)</span>
+                                <span id="val-wind" class="text-blue-600 text-lg">40%</span>
+                                <span>70% (Offshore/High Yield)</span>
+                            </div>
+                            <p id="grid-insight" class="mt-4 text-sm text-stone-700 italic border-l-2 border-blue-300 pl-3">
+                                At 40% capacity factor, Green H2 capital costs dominate. Geologic H2 maintains a strong price advantage.
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+            workforce: {
+                title: "Workforce & Cyber-Supply Chain Transition",
+                content: `
+                    <div class="mb-6 p-4 bg-white rounded shadow border-l-4 border-amber-500">
+                        <h3 class="font-bold text-lg text-amber-800">Human Capital & Infrastructure Security</h3>
+                        <p class="text-sm text-stone-600 mt-1">
+                            Transitioning to a hydrogen economy requires mass labor retraining and stringent cybersecurity for new infrastructure. This module leverages the <strong>EPACT 1820 Employment Study</strong> (IMPLAN modeling) and DOE insights on the <strong>"Citrix" Cyber Supply Chain program</strong>.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Workforce Impact -->
+                        <div class="card p-6">
+                            <h3 class="font-bold text-slate-800 mb-4">IMPLAN Workforce Transition Model</h3>
+                            <label class="text-sm font-semibold text-stone-700 block mb-2">Hydrogen Market Penetration (%)</label>
+                            <input type="range" id="slide-penetration" min="0" max="100" step="5" value="20" class="w-full accent-amber-500 mb-4" oninput="updateWorkforce()">
+                            <div class="text-center mb-6">
+                                <span class="text-3xl font-black text-amber-500" id="val-penetration">20%</span>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div class="bg-green-50 p-3 rounded border border-green-200 flex justify-between items-center">
+                                    <span class="text-sm font-bold text-green-800">Net New Jobs Created (IA/NE)</span>
+                                    <span class="text-lg font-black text-green-700" id="job-net">+21,000</span>
+                                </div>
+                                <div class="bg-blue-50 p-3 rounded border border-blue-200 flex justify-between items-center">
+                                    <span class="text-sm font-bold text-blue-800">Fuel Cell/H2 Tech Retraining Needed</span>
+                                    <span class="text-lg font-black text-blue-700" id="job-retool">23,400</span>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded border border-red-200 flex justify-between items-center">
+                                    <span class="text-sm font-bold text-red-800">Legacy Fossil Jobs Displaced</span>
+                                    <span class="text-lg font-black text-red-700" id="job-loss">-960</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cyber Security -->
+                        <div class="card p-6 bg-slate-900 text-white">
+                            <h3 class="font-bold text-amber-500 mb-4">Citrix Cyber Readiness (DOE/CESAR)</h3>
+                            <p class="text-sm text-slate-300 mb-4 leading-relaxed">
+                                As load growth explodes and hundreds of thousands of new components (compressors, electrolyzers, smart-valves) are added to the IA/NE grid by 2030, vulnerability testing is critical.
+                            </p>
+                            <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 mb-4">
+                                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Required Sub-component Cyber Audits</h4>
+                                <div class="text-4xl font-black text-sky-400" id="cyber-audits">14,500</div>
+                                <p class="text-xs text-slate-400 mt-1">Projected audits needed for new H2 infrastructure at current penetration.</p>
+                            </div>
+                            <p class="text-xs text-slate-400 italic">
+                                "We need to really double down and triple down on our supply chain testing efforts. That's where we can get some of the biggest bang for the buck on the security side." — Alex Fitzsimmons, DOE Energy Dominance Agenda
+                            </p>
                         </div>
                     </div>
                 `
@@ -379,6 +558,8 @@
                             <div id="sim-analysis" class="mt-4 text-sm text-stone-600 italic border-l-4 border-slate-300 pl-4 py-2 bg-white shadow-sm">
                                 Moderate opposition. Expect organized landowner resistance requiring costly community benefit agreements and rerouting of gathering lines around prime agricultural land.
                             </div>
+                            <button onclick="generateStrategy(event)" class="mt-5 w-full bg-slate-900 text-white font-bold py-3 rounded-lg hover:bg-slate-800 transition shadow flex justify-center items-center">Draft Community Outreach Strategy ✨</button>
+                            <div id="ai-strategy-output" class="mt-4 text-sm text-stone-800 hidden bg-amber-50 p-5 rounded border border-amber-200 leading-relaxed shadow-inner"></div>
                         </div>
                     </div>
                 `
@@ -451,12 +632,29 @@
                         </p>
                     </div>
                 `
+            },
+            ai: {
+                title: "AI Analyst ✨",
+                content: `
+                    <div class="card p-6 flex flex-col h-[70vh]">
+                        <p class="text-sm text-stone-600 mb-4 pb-4 border-b border-stone-100">Consult our embedded Gemini-powered AI analyst. <strong>The AI is grounded in the 2024 DOE AMRs, the CAELP 2040 Projections, the EPACT 1820 Employment Study, and the National Clean Hydrogen Strategy.</strong></p>
+                        <div id="chat-history" class="flex-grow overflow-y-auto bg-stone-50 p-4 rounded border border-stone-200 mb-4 flex flex-col space-y-4">
+                            <div class="bg-slate-200 p-4 rounded-xl rounded-tl-sm self-start max-w-[85%] text-sm text-slate-800 shadow-sm leading-relaxed">
+                                <strong>System Online.</strong> Hello! I am your H2 Heartland AI Analyst. I have full access to the 2024 DOE AMRs, CAELP infrastructure projections, and EPACT employment data. How can I assist you today?
+                            </div>
+                        </div>
+                        <div class="flex space-x-2 pt-2">
+                            <input type="text" id="chat-input" onkeypress="if(event.key === 'Enter') handleChatSend()" class="flex-grow border border-stone-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm" placeholder="e.g. Based on AMR-06, what are the main bottlenecks for dispensing infrastructure?">
+                            <button onclick="handleChatSend()" class="bg-amber-500 text-white px-6 py-3 rounded-lg text-sm font-bold hover:bg-amber-600 transition shadow">Ask ✨</button>
+                        </div>
+                    </div>
+                `
             }
         };
 
         let myChart = null; // Chart.js instance
         let outlookPlot = null; // Plotly instance
-        
+        let gridPlot = null; // Plotly instance for Grid tab
         // Geo Canvas State
         let geoCanvasRef = null;
         let currentGeoDepth = 5000;
@@ -497,8 +695,11 @@
             // Initialize Module-Specific Scripts
             if (sectionKey === 'geo') initGeoCanvas();
             if (sectionKey === 'econ') initCostChart();
+            if (sectionKey === 'infra') setTimeout(initInfra, 50); // slight delay for DOM
+            if (sectionKey === 'grid') setTimeout(initGridChart, 50);
+            if (sectionKey === 'workforce') updateWorkforce(); // init default values
             if (sectionKey === 'outlook') initOutlookChart();
-            if (sectionKey === 'reg') updateSocialSim(); // Init state
+            if (sectionKey === 'reg') updateSocialSim();
         }
 
         // --- Module: Geology (Canvas Drawing) ---
@@ -683,13 +884,15 @@
                 // Re-render math inside the result string dynamically
                 if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
                     window.MathJax.typesetPromise([result]).catch((err) => console.log(err.message));
+                } else if (window.MathJax && window.MathJax.typeset) {
+                     MathJax.typeset([result]);
                 }
             }
 
             drawGeoMap();
         }
 
-        // --- Module: Economics (Chart.js) ---
+        // --- Module: Economics (Chart.js & GREET) ---
         function initCostChart() {
             const ctx = document.getElementById('costChart').getContext('2d');
             myChart = new Chart(ctx, {
@@ -697,7 +900,7 @@
                 data: {
                     labels: ['Geologic H2', 'Grey H2 (SMR)', 'Blue H2 (SMR+CCS)', 'Green H2 (Wind)'],
                     datasets: [{
-                        label: 'Production Cost ($/kg)',
+                        label: 'Net LCOH ($/kg)',
                         data: [0.85, 1.50, 2.20, 4.50],
                         backgroundColor: [
                             '#f59e0b', // Amber (Gold H2)
@@ -726,28 +929,183 @@
                     }
                 }
             });
+            updateCostChart(); // Set initial values based on sliders
         }
 
         function updateCostChart() {
-            const isSubsidized = document.getElementById('subsidyCheck').checked;
-            // 45V / 45Q Credit Logic Post-OBBBA 2026:
-            // Geologic: Usually low CI, eligible for ~$0.60 - $1.00 depending on lifecycle.
-            // Green: Eligible for max $3.00, but faces tight "Three Pillars" restrictions.
-            // Blue: 45Q parity grants highly reliable ~$1.00+ value under OBBBA.
+            if(!myChart) return;
             
-            // Base Data
-            let data = [0.85, 1.50, 2.20, 4.50];
+            const gridCI = parseFloat(document.getElementById('slide-gridci').value);
+            const captureRate = parseFloat(document.getElementById('slide-capture').value);
+            const methaneLeakage = parseFloat(document.getElementById('slide-leakage').value);
+            
+            // Update labels
+            document.getElementById('val-gridci').innerText = gridCI.toFixed(1);
+            document.getElementById('val-capture').innerText = captureRate + "%";
+            document.getElementById('val-leakage').innerText = methaneLeakage.toFixed(1) + "%";
 
-            if (isSubsidized) {
-                // Apply subsidies (cannot go below 0 theoretically, but illustrative)
-                data[0] = Math.max(0.1, data[0] - 1.00); // Geologic estimated credit
-                data[1] = data[1]; // Grey gets nothing
-                data[2] = Math.max(0.1, data[2] - 1.00); // Blue (45Q parity post-OBBBA)
-                data[3] = Math.max(0.1, data[3] - 3.00); // Green gets max credit
-            }
+            // 45V Credit Logic (Green)
+            let greenCredit = 0;
+            let effectiveGreenCI = gridCI; // Simplified: ignores lifecycle build emissions for this demo
+            if (effectiveGreenCI <= 0.45) greenCredit = 3.00;
+            else if (effectiveGreenCI <= 1.5) greenCredit = 1.00;
+            else if (effectiveGreenCI <= 2.5) greenCredit = 0.75;
+            else if (effectiveGreenCI <= 4.0) greenCredit = 0.60;
+
+            // 45Q Credit Logic (Blue)
+            // Approx 9 kg CO2 produced per kg H2 via SMR.
+            // 45Q pays $85/ton of CO2 captured.
+            const kgCo2Produced = 9.0;
+            // Penalty for methane leakage (methane GWP ~28 over 100yrs). Simplification for demo.
+            const leakagePenaltyCI = (methaneLeakage / 100) * 28; 
+            
+            const kgCo2Captured = kgCo2Produced * (captureRate / 100);
+            const tonsCo2Captured = kgCo2Captured / 1000;
+            let blueCredit = tonsCo2Captured * 85; // $ per kg H2
+            
+            // If total CI (un-captured + leakage) pushes it too high, it might lose parity, but we'll show raw 45Q value
+            
+            // Base Data (Unsubsidized approx)
+            let baseGeo = 0.85;
+            let baseGrey = 1.50 + leakagePenaltyCI * 0.1; // Slight cost bump for leak penalties
+            let baseBlue = 2.20 + leakagePenaltyCI * 0.1;
+            let baseGreen = 4.50;
+
+            // Apply subsidies
+            let data = [
+                Math.max(0.1, baseGeo), // Assume Geologic gets no massive IRA subsidy here to show baseline strength
+                Math.max(0.1, baseGrey),
+                Math.max(0.1, baseBlue - blueCredit),
+                Math.max(0.1, baseGreen - greenCredit)
+            ];
 
             myChart.data.datasets[0].data = data;
             myChart.update();
+            
+            document.getElementById('credit-status').innerText = `Applied 45V Credit: $${greenCredit.toFixed(2)}/kg | Applied 45Q Credit: $${blueCredit.toFixed(2)}/kg`;
+        }
+
+        // --- Module: Midstream Infrastructure (I-80) ---
+        function initInfra() {
+            updateInfra();
+        }
+
+        function updateInfra() {
+            const stations = parseInt(document.getElementById('slide-stations').value);
+            document.getElementById('val-stations').innerText = stations + " Stations";
+            
+            const demand = stations * 1000; // 1000 kg/day per station
+            document.getElementById('val-demand').innerText = demand.toLocaleString() + " kg/day";
+            
+            // Render map dots
+            const markerContainer = document.getElementById('station-markers');
+            markerContainer.innerHTML = '';
+            for(let i=0; i<Math.min(stations, 20); i++) { // cap visuals at 20 dots
+                const dot = document.createElement('div');
+                dot.className = 'w-3 h-3 bg-amber-500 rounded-full border border-white shadow-sm z-10';
+                markerContainer.appendChild(dot);
+            }
+            if(stations > 20) {
+                const plus = document.createElement('div');
+                plus.className = 'text-xs font-bold text-slate-600 bg-white px-1 rounded z-10';
+                plus.innerText = `+${stations - 20}`;
+                markerContainer.appendChild(plus);
+            }
+
+            // Calculate CAPEX (Simplified ERM models)
+            // Pipeline: High fixed base cost, low variable station cost
+            const pipeCapex = 500 + (stations * 2);
+            // Liquid: Med fixed base (Liquefier), med variable
+            const liquidCapex = 50 + (stations * 3.5);
+            // Gas: Low fixed base, high variable (compressors everywhere)
+            const gasCapex = 10 + (stations * 1.5);
+            
+            const maxCapex = Math.max(pipeCapex, liquidCapex, gasCapex);
+            
+            document.getElementById('capex-pipe').innerText = `Capex: $${pipeCapex}M`;
+            document.getElementById('bar-pipe').style.width = `${(pipeCapex/maxCapex)*100}%`;
+            
+            document.getElementById('capex-liquid').innerText = `Capex: $${liquidCapex}M`;
+            document.getElementById('bar-liquid').style.width = `${(liquidCapex/maxCapex)*100}%`;
+            
+            document.getElementById('capex-gas').innerText = `Capex: $${gasCapex}M`;
+            document.getElementById('bar-gas').style.width = `${(gasCapex/maxCapex)*100}%`;
+        }
+
+        // --- Module: Grid Integration (Plotly) ---
+        function initGridChart() {
+            const xValues = [10, 20, 30, 40, 50, 60, 70]; // Wind Capacity Factor %
+            
+            // Geologic H2 is base load, unaffected by wind CF
+            const yGeo = Array(7).fill(0.85);
+            
+            // Green H2 LCOH drops exponentially as Capacity Factor rises (better utilization of electrolyzer CAPEX)
+            // Simplified curve: LCOH = Base_Opex + (Capex_factor / CF)
+            const yGreen = xValues.map(cf => 1.5 + (120 / cf)); 
+
+            const traceGeo = {
+                x: xValues, y: yGeo,
+                type: 'scatter', mode: 'lines', line: {color: '#f59e0b', width: 3}, name: 'Geologic H2'
+            };
+
+            const traceGreen = {
+                x: xValues, y: yGreen,
+                type: 'scatter', mode: 'lines', line: {color: '#22c55e', width: 3}, name: 'Electrolytic (Green) H2'
+            };
+
+            const layout = {
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                margin: {t: 10, l: 40, r: 20, b: 40},
+                xaxis: { title: 'Wind Capacity Factor (%)', gridcolor: '#e5e7eb' },
+                yaxis: { title: 'LCOH ($/kg)', gridcolor: '#e5e7eb', range: [0, 10] },
+                showlegend: true,
+                legend: {x: 0.6, y: 0.9}
+            };
+
+            Plotly.newPlot('gridChart', [traceGeo, traceGreen], layout, {displayModeBar: false, responsive: true});
+            gridPlot = true;
+            updateGridSim(); // sync text
+        }
+
+        function updateGridSim() {
+            if(!gridPlot) return;
+            const cf = parseInt(document.getElementById('slide-wind').value);
+            document.getElementById('val-wind').innerText = cf + "%";
+            
+            const insightEl = document.getElementById('grid-insight');
+            const greenLCOH = 1.5 + (120 / cf);
+            
+            if(cf < 30) {
+                insightEl.innerText = `At ${cf}% capacity factor, the electrolyzer sits idle too often. Capital costs destroy Green H2 economics (~$${greenLCOH.toFixed(2)}/kg). Geologic H2 is vastly superior.`;
+                insightEl.className = "mt-4 text-sm text-stone-700 italic border-l-2 border-red-400 bg-red-50 pl-3 py-2";
+            } else if (cf < 50) {
+                insightEl.innerText = `At ${cf}% capacity factor, Green H2 costs drop to ~$${greenLCOH.toFixed(2)}/kg. Geologic H2 still maintains a strong price advantage without subsidies.`;
+                insightEl.className = "mt-4 text-sm text-stone-700 italic border-l-2 border-amber-400 bg-amber-50 pl-3 py-2";
+            } else {
+                insightEl.innerText = `At a phenomenal ${cf}% capacity factor, Green H2 approaches ~$${greenLCOH.toFixed(2)}/kg. With heavy 45V subsidies, it can compete with Geologic H2.`;
+                insightEl.className = "mt-4 text-sm text-stone-700 italic border-l-2 border-green-400 bg-green-50 pl-3 py-2";
+            }
+        }
+
+        // --- Module: Workforce (EPACT 1820 & Citrix) ---
+        function updateWorkforce() {
+            const pen = parseInt(document.getElementById('slide-penetration').value);
+            document.getElementById('val-penetration').innerText = pen + "%";
+            
+            // EPACT 1820 multipliers (simplified for demo)
+            // 100% penetration = ~105,000 net jobs, ~117,000 retraining, ~4,800 displaced
+            const netJobs = Math.round(1050 * pen);
+            const retoolJobs = Math.round(1170 * pen);
+            const lossJobs = Math.round(48 * pen);
+            
+            // Citrix audits (exponential scaling with penetration)
+            const audits = Math.round(Math.pow(pen, 1.5) * 14.5);
+
+            document.getElementById('job-net').innerText = "+" + netJobs.toLocaleString();
+            document.getElementById('job-retool').innerText = retoolJobs.toLocaleString();
+            document.getElementById('job-loss').innerText = "-" + lossJobs.toLocaleString();
+            document.getElementById('cyber-audits').innerText = audits.toLocaleString();
         }
 
         function showAgDetail(stage) {
@@ -853,6 +1211,116 @@
             };
             
             Plotly.relayout(el, layoutUpdate);
+        }
+
+        // --- Gemini API Logic ---
+        const apiKey = "";
+        
+        async function callGemini(userText, systemText) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ role: "user", parts: [{ text: userText }] }]
+            };
+            if (systemText) {
+                payload.systemInstruction = { parts: [{ text: systemText }] };
+            }
+            
+            let retries = 0;
+            const maxRetries = 5;
+            let delay = 1000;
+
+            while (retries <= maxRetries) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        if (response.status === 429 || response.status >= 500) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        const errData = await response.json();
+                        throw new Error(errData.error?.message || "API Error");
+                    }
+                    const data = await response.json();
+                    let rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
+                    // Strip markdown code fences if Gemini ignores instruction
+                    rawText = rawText.replace(/```html/g, '').replace(/```/g, '');
+                    return rawText;
+                } catch (error) {
+                    if (retries === maxRetries) {
+                        return `<span class="text-red-600 font-bold">Error:</span> Unable to reach the AI analyst at this time. Please ensure the API key is configured or try again later.`;
+                    }
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    retries++;
+                    delay *= 2;
+                }
+            }
+        }
+
+        async function handleChatSend() {
+            const inputEl = document.getElementById('chat-input');
+            const historyEl = document.getElementById('chat-history');
+            const text = inputEl.value.trim();
+            if (!text) return;
+
+            // Append User Message
+            historyEl.innerHTML += `
+                <div class="bg-amber-100 border border-amber-200 p-4 rounded-xl rounded-tr-sm self-end max-w-[85%] text-sm text-amber-900 shadow-sm">
+                    ${text}
+                </div>
+            `;
+            inputEl.value = '';
+            historyEl.scrollTop = historyEl.scrollHeight;
+
+            // Append Loading Indicator
+            const loadingId = 'loading-' + Date.now();
+            historyEl.innerHTML += `
+                <div id="${loadingId}" class="bg-slate-200 p-4 rounded-xl rounded-tl-sm self-start max-w-[85%] text-sm text-slate-500 shadow-sm flex items-center space-x-2">
+                    <svg class="animate-spin h-4 w-4 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span>Analyzing...</span>
+                </div>
+            `;
+            historyEl.scrollTop = historyEl.scrollHeight;
+
+            const systemPrompt = "You are an expert energy analyst specializing in Geologic Hydrogen in the Midcontinent Rift System (Iowa/Nebraska). You have deep knowledge of the CAELP 2040 Projections (ERM), the 2024 DOE AMRs (04-09 covering infrastructure, fuel cells, systems integration, and GREET analysis), the National Clean Hydrogen Strategy Roadmap, the EPACT 1820 Employment Study, and the 2025/2026 OBBBA. You answer questions based on these documents. Keep your answers concise, professional, and directly related to hydrogen economics, infrastructure, geology, and policy in the Midwest. Format output in clean HTML (e.g. use <b>, <ul>, <li class='ml-4 list-disc'>, <br>) without markdown backticks.";
+            
+            const responseText = await callGemini(text, systemPrompt);
+            
+            document.getElementById(loadingId).remove();
+            historyEl.innerHTML += `
+                <div class="bg-slate-200 p-4 rounded-xl rounded-tl-sm self-start max-w-[85%] text-sm text-slate-800 shadow-sm leading-relaxed space-y-2">
+                    ${responseText}
+                </div>
+            `;
+            historyEl.scrollTop = historyEl.scrollHeight;
+        }
+
+        async function generateStrategy(event) {
+            const outputEl = document.getElementById('ai-strategy-output');
+            const sliderVal = document.getElementById('sentimentSlider').value;
+            const btn = event.currentTarget;
+            
+            const origText = btn.innerText;
+            btn.innerText = "Drafting Strategy... ✨";
+            btn.disabled = true;
+            outputEl.classList.remove('hidden');
+            outputEl.innerHTML = `
+                <div class="flex items-center space-x-3 text-amber-700 font-bold">
+                    <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span>Consulting AI Policy Expert...</span>
+                </div>
+            `;
+
+            const systemPrompt = "You are a public relations and regulatory affairs expert in the US energy sector in 2026. Format output in clean HTML (use <b>, <ul class='list-disc ml-5 mt-2 space-y-2'>, <li>, <br>) without markdown backticks.";
+            const userPrompt = `The current public sentiment score for a proposed geologic hydrogen gathering pipeline network in the Midwest (Iowa/Nebraska) is ${sliderVal} out of 100 (where 0 is extreme NIMBY hostility and 100 is total YIMBY support). Based on this specific score, draft a concise, tailored 3-point community outreach strategy to improve relations and mitigate permitting delays.`;
+
+            const responseText = await callGemini(userPrompt, systemPrompt);
+            
+            outputEl.innerHTML = responseText;
+            btn.innerText = origText;
+            btn.disabled = false;
         }
 
         // --- Init ---
