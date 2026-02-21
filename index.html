@@ -7,8 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-    
+
     <!-- MathJax for rendering LaTeX math formulas -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['\\(', '\\)']] },
+            startup: {
+                typeset: false // Disable automatic typesetting on startup
+            }
+        };
+    </script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
@@ -151,19 +159,19 @@
                             <div>
                                 <h4 class="font-bold text-sm text-amber-700 mb-2">Generation Mechanisms</h4>
                                 <ul class="list-disc ml-5 text-sm text-stone-600 space-y-2">
-                                    <li><strong>Serpentinization:</strong> Deep groundwater reacting with olivine/pyroxene-rich rocks at elevated temperatures ($>200^\\circ\\text{C}$) to form serpentine, magnetite, and free Hydrogen ($H_2$).</li>
+                                    <li><strong>Serpentinization:</strong> Deep groundwater reacting with olivine/pyroxene-rich rocks at elevated temperatures (\\(>200^\\circ\\text{C}\\)) to form serpentine, magnetite, and free Hydrogen (\\(\\text{H}_2\\)).</li>
                                     <li><strong>Radiolysis:</strong> Natural radioactive decay of trace elements (U, Th, K) in the crust splitting trapped water molecules into Hydrogen and Oxygen.</li>
                                 </ul>
-                                <div class="bg-slate-100 p-4 rounded text-xs overflow-x-auto whitespace-nowrap mt-3 border border-slate-200 text-slate-800">
+                                <div class="bg-slate-100 p-4 rounded text-xs overflow-x-auto whitespace-nowrap mt-3 border border-slate-200 text-slate-800 text-center">
                                     $$ 3\\text{Fe}_2\\text{SiO}_4 \\text{ (Fayalite)} + 2\\text{H}_2\\text{O} \\rightarrow 2\\text{Fe}_3\\text{O}_4 \\text{ (Magnetite)} + 3\\text{SiO}_2 + 2\\text{H}_2 $$
                                 </div>
                             </div>
                             <div>
                                 <h4 class="font-bold text-sm text-amber-700 mb-2">The "Goldilocks" Stratigraphy</h4>
                                 <ul class="list-disc ml-5 text-sm text-stone-600 space-y-2">
-                                    <li><strong>Source:</strong> Precambrian crystalline basement rocks containing high concentrations of ferrous iron ($Fe^{2+}$).</li>
+                                    <li><strong>Source:</strong> Precambrian crystalline basement rocks containing high concentrations of ferrous iron (\\(\\text{Fe}^{2+}\\)).</li>
                                     <li><strong>Reservoir:</strong> Porous and permeable clastic sedimentary rocks (e.g., Oronto Group sandstones) overlying the basement.</li>
-                                    <li><strong>Seal:</strong> <em>Crucial constraint.</em> $H_2$ is highly diffusive. Traditional hydrocarbon seals (shales) may be insufficient. Dense evaporite (salt) layers or highly mature, tight shales are required to trap the gas.</li>
+                                    <li><strong>Seal:</strong> <em>Crucial constraint.</em> \\(\\text{H}_2\\) is highly diffusive. Traditional hydrocarbon seals (shales) may be insufficient. Dense evaporite (salt) layers or highly mature, tight shales are required to trap the gas.</li>
                                 </ul>
                             </div>
                         </div>
@@ -177,8 +185,8 @@
                                     Geologic hydrogen is rarely found at 100% purity. It migrates and accumulates in mixed-gas reservoirs. Understanding and managing these impurities is the primary driver of surface facility capital expenditures (CAPEX).
                                 </p>
                                 <ul class="text-sm text-stone-600 space-y-3 mb-6">
-                                    <li><strong class="text-slate-800">Typical Composition:</strong> $H_2$ is frequently co-mingled with Nitrogen ($N_2$), Methane ($CH_4$), and Helium ($He$). High concentrations of $N_2$ require energy-intensive separation if pure $H_2$ is required.</li>
-                                    <li><strong class="text-amber-600">The Helium Kicker:</strong> The presence of Helium (often 1-3% in deep cratonic structures) dramatically alters economic feasibility. Helium is a high-value, scarce commodity. Co-extracting Helium can completely offset the cost of the expensive surface separation infrastructure (Pressure Swing Adsorption units and cryogenic separation) required to purify the $H_2$.</li>
+                                    <li><strong class="text-slate-800">Typical Composition:</strong> \\(\\text{H}_2\\) is frequently co-mingled with Nitrogen (\\(\\text{N}_2\\)), Methane (\\(\\text{CH}_4\\)), and Helium (\\(\\text{He}\\)). High concentrations of \\(\\text{N}_2\\) require energy-intensive separation if pure \\(\\text{H}_2\\) is required.</li>
+                                    <li><strong class="text-amber-600">The Helium Kicker:</strong> The presence of Helium (often 1-3% in deep cratonic structures) dramatically alters economic feasibility. Helium is a high-value, scarce commodity. Co-extracting Helium can completely offset the cost of the expensive surface separation infrastructure (Pressure Swing Adsorption units and cryogenic separation) required to purify the \\(\\text{H}_2\\).</li>
                                     <li><strong class="text-slate-800">Target Purity:</strong> Fuel cell vehicles require >99.99% purity. However, local ammonia fertilizer production (the primary IA/NE use-case) can tolerate lower purities, drastically reducing extraction LCOH.</li>
                                 </ul>
                             </div>
@@ -201,7 +209,7 @@
                                 <canvas id="geoCanvas" class="w-full h-full absolute inset-0"></canvas>
                                 <div id="geo-tooltip" class="absolute hidden bg-slate-900 text-white text-xs px-3 py-2 rounded shadow-lg pointer-events-none z-20 font-semibold border border-amber-500"></div>
                                 <div class="absolute bottom-2 right-2 bg-white/90 p-2 rounded text-xs shadow pointer-events-none z-10">
-                                    <div class="flex items-center"><span class="w-3 h-3 bg-red-500 rounded-full mr-2"></span> High $H_2$ Potential</div>
+                                    <div class="flex items-center"><span class="w-3 h-3 bg-red-500 rounded-full mr-2"></span> High \\(\\text{H}_2\\) Potential</div>
                                     <div class="flex items-center mt-1"><span class="w-3 h-3 bg-blue-300 rounded-full mr-2"></span> Aquifer/Low Pot.</div>
                                 </div>
                             </div>
@@ -428,6 +436,9 @@
                             <li><strong>[5] ERM (2023).</strong> "Review of Projections through 2040 of U.S. Clean Hydrogen Production, Infrastructure, and Costs." CAELP analysis of IRA 45V PTC impacts.</li>
                             <li><strong>[6] Ellis, G.S., et al. (2022).</strong> "Hydrogen generation from serpentinization in the subsurface." <em>Geochimica et Cosmochimica Acta</em>.</li>
                             <li><strong>[7] "Strategic Realignment" (2026).</strong> "The Strategic Realignment of the American Hydrogen Industry: A Comprehensive Analysis of Economic and Tax Transformations Post-OBBBA in 2026." Detailing the legislative shift to market-driven, execution-oriented development.</li>
+                            <li><strong>[8] Post-OBBA Technical Report.</strong> <a href="https://drive.google.com/file/d/1dBKUcUEUS2EDnjhAeQyqoE7-83h00a0v/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[9] Executive Slide Deck.</strong> <a href="https://drive.google.com/file/d/1KAqxyxrc6iW3W7e5b9XFgJncS4QRwy5q/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[10] Supplementary Data & Projections.</strong> <a href="https://drive.google.com/file/d/1MhDCYweWjl2wB0fB6wRatT1J5tmb1Jnt/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
                         </ul>
 
                         <h3 class="font-bold text-slate-800 mt-8 mb-4">Research Methodology</h3>
@@ -478,8 +489,10 @@
             `;
 
             // Tell MathJax to re-render formulas in the newly injected HTML
-            if (window.MathJax) {
+            if (window.MathJax && window.MathJax.typesetPromise) {
                 MathJax.typesetPromise([main]).catch((err) => console.log(err.message));
+            } else if (window.MathJax && window.MathJax.typeset) {
+                 MathJax.typeset([main]);
             }
 
             // Initialize Module-Specific Scripts
@@ -491,43 +504,48 @@
 
         // --- Module: Geology (Canvas Drawing) ---
         function initGeoCanvas() {
-            const canvas = document.getElementById('geoCanvas');
-            if (!canvas) return;
-            geoCanvasRef = canvas;
-            
-            // Set resolution to match display size exactly
-            geoCanvasRef.width = geoCanvasRef.parentElement.offsetWidth;
-            geoCanvasRef.height = geoCanvasRef.parentElement.offsetHeight;
+            // Slight delay ensures Tailwind and DOM are fully laid out before canvas captures dimensions
+            setTimeout(() => {
+                const canvas = document.getElementById('geoCanvas');
+                if (!canvas) return;
+                geoCanvasRef = canvas;
+                
+                // Set resolution to match display size exactly, with fallbacks
+                const parent = geoCanvasRef.parentElement;
+                geoCanvasRef.width = parent.offsetWidth || 600;
+                geoCanvasRef.height = parent.offsetHeight || 250;
 
-            // Handle window resizes
-            window.addEventListener('resize', () => {
-                if(document.getElementById('geoCanvas')) {
-                    geoCanvasRef.width = geoCanvasRef.parentElement.offsetWidth;
-                    geoCanvasRef.height = geoCanvasRef.parentElement.offsetHeight;
+                // Handle window resizes safely
+                window.removeEventListener('resize', window._geoResizeHandler);
+                window._geoResizeHandler = () => {
+                    if(geoCanvasRef && document.getElementById('geoCanvas')) {
+                        geoCanvasRef.width = geoCanvasRef.parentElement.offsetWidth;
+                        geoCanvasRef.height = geoCanvasRef.parentElement.offsetHeight;
+                        drawGeoMap();
+                    }
+                };
+                window.addEventListener('resize', window._geoResizeHandler);
+
+                // Interactive Tooltips
+                geoCanvasRef.addEventListener('mousemove', handleGeoMouseMove);
+                geoCanvasRef.addEventListener('mouseleave', () => {
+                    const tooltipEl = document.getElementById('geo-tooltip');
+                    if(tooltipEl) tooltipEl.classList.add('hidden');
+                });
+
+                // Initial render
+                const slider = document.getElementById('depth-slider');
+                if(slider) {
+                    updateGeoSim(slider.value);
+                } else {
                     drawGeoMap();
                 }
-            });
-
-            // Interactive Tooltips
-            geoCanvasRef.addEventListener('mousemove', handleGeoMouseMove);
-            geoCanvasRef.addEventListener('mouseleave', () => {
-                const tooltipEl = document.getElementById('geo-tooltip');
-                if(tooltipEl) tooltipEl.classList.add('hidden');
-            });
-
-            // Initial render
-            const slider = document.getElementById('depth-slider');
-            if(slider) {
-                updateGeoSim(slider.value);
-            } else {
-                drawGeoMap();
-            }
+            }, 50);
         }
 
         function handleGeoMouseMove(e) {
             if (!geoCanvasRef) return;
             const rect = geoCanvasRef.getBoundingClientRect();
-            // Calculate mouse position relative to canvas
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
             
@@ -539,9 +557,9 @@
             geoHotspots.forEach(hSpot => {
                 const cx = w * hSpot.x;
                 const cy = h * hSpot.y;
-                // Double radius for a more forgiving hit area
+                // Double radius for a more forgiving hit area on touch/mouse
                 const dist = Math.sqrt(Math.pow(mouseX - cx, 2) + Math.pow(mouseY - cy, 2));
-                if (dist <= hSpot.r * 2) {
+                if (dist <= hSpot.r * 2.5) {
                     found = true;
                     if(tooltipEl) {
                         tooltipEl.innerText = hSpot.name;
@@ -651,10 +669,10 @@
             let color = "text-stone-600";
             
             if (currentGeoDepth < 2500) {
-                msg = "⚠️ Too Shallow: Freshwater aquifers pose contamination risk. High porosity limits $H_2$ trapping.";
+                msg = "⚠️ Too Shallow: Freshwater aquifers pose contamination risk. High porosity limits \\(\\text{H}_2\\) trapping.";
                 color = "text-red-600";
             } else if (currentGeoDepth >= 2500 && currentGeoDepth < 8000) {
-                msg = "✅ Target Zone: Sedimentary cap rocks (evaporites) trap rising $H_2$ gas. Ideal thermal window.";
+                msg = "✅ Target Zone: Sedimentary cap rocks (evaporites) trap rising \\(\\text{H}_2\\) gas. Ideal thermal window.";
                 color = "text-green-600";
             } else {
                 msg = "⚠️ High Cost / High Heat: Reaching ultramafic basement rock. Drilling costs rise exponentially ($$$).";
@@ -663,9 +681,11 @@
             
             if(result) {
                 result.innerHTML = `<span class="${color} font-bold">${msg}</span>`;
-                // Re-render math inside the result string if present
-                if (window.MathJax) {
+                // Re-render math inside the result string dynamically
+                if (window.MathJax && window.MathJax.typesetPromise) {
                     MathJax.typesetPromise([result]).catch((err) => console.log(err.message));
+                } else if (window.MathJax && window.MathJax.typeset) {
+                     MathJax.typeset([result]);
                 }
             }
 
@@ -842,6 +862,11 @@
         // Start at Exec Summary
         window.addEventListener('DOMContentLoaded', () => {
             nav('exec');
+            
+            // Optional: Re-render MathJax once after the entire page is loaded just to be safe
+            if (window.MathJax && window.MathJax.typesetPromise) {
+               window.MathJax.typesetPromise();
+            }
         });
 
     </script>
