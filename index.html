@@ -26,16 +26,13 @@
          1. 'Executive Brief': High-level metrics and the 'Feasibility Score'.
          2. 'Geology & Extraction': Technical deep-dive into the Midcontinent Rift, utilizing a custom Canvas visualizer for strata.
          3. 'Economics & Ag': The core value proposition (Fertilizer/Ethanol) using interactive cost comparison charts.
-         4. 'Risk & Regulation': A simulation module where users adjust public sentiment to see impacts on permitting timelines (based on CO2 pipeline data).
-         5. '10-Year Outlook': Monte Carlo style projections with uncertainty bands.
-         This structure allows users to move from "What is it?" to "Is it profitable?" to "Is it allowed?" logically.
-    -->
-    <!-- Visualization & Content Choices:
-         1. Geology: Canvas Draw -> Visualizes the Midcontinent Rift depth/location. Goal: Show where the H2 is.
-         2. Cost Comparison: Chart.js Bar -> Compares Geologic vs. Green/Blue H2 costs. Goal: Highlight the cost advantage of extraction.
-         3. Economic Impact: Plotly Band Chart -> Shows 10-year GDP variance. Goal: Quantify uncertainty.
-         4. Ag Loop: Interactive HTML Grid -> Highlights the circular economy of Corn-Ethanol-Ammonia. Goal: Show local benefits.
-         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+         4. 'Midstream & I-80': Distribution costs across different modalities.
+         5. 'MISO Grid & Adequacy': Analyzes wind Dunkelflaute and firm geologic capacity.
+         6. 'MTEP24 Interconnection': Bypassing the DPP queue and IBR issues.
+         7. 'Workforce & Cyber': IMPLAN jobs and Citrix audits.
+         8. 'Risk & Regulation': Public sentiment simulator + AI Strategy generation.
+         9. '10-Year Outlook': Monte Carlo style projections with uncertainty bands.
+         10. 'AI Analyst': Embedded Gemini logic for conversational Q&A.
     -->
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f5f5f4; color: #1c1917; }
@@ -84,6 +81,12 @@
                 </button>
                 <button onclick="nav('infra')" id="nav-infra" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center border-l-4 border-transparent hover:border-amber-500">
                     <span>Midstream & I-80</span>
+                </button>
+                <button onclick="nav('miso')" id="nav-miso" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center border-l-4 border-transparent hover:border-amber-500">
+                    <span>MISO Resource Adequacy</span>
+                </button>
+                <button onclick="nav('queue')" id="nav-queue" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center border-l-4 border-transparent hover:border-amber-500">
+                    <span>MTEP24 & Interconnection</span>
                 </button>
                 <button onclick="nav('grid')" id="nav-grid" class="nav-item w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center border-l-4 border-transparent hover:border-amber-500">
                     <span>Grid & Wind</span>
@@ -175,7 +178,7 @@
                                     <li><strong>Radiolysis:</strong> Natural radioactive decay of trace elements (U, Th, K) in the crust splitting trapped water molecules into Hydrogen and Oxygen.</li>
                                 </ul>
                                 <div class="bg-slate-100 p-4 rounded text-xs overflow-x-auto whitespace-nowrap mt-3 border border-slate-200 text-slate-800 text-center">
-                                    $$ 3\\text{Fe}_2\\text{SiO}_4 \\text{ (Fayalite)} + 2\\text{H}_2\\text{O} \\rightarrow 2\\text{Fe}_3\\text{O}_4 \\text{ (Magnetite)} + 3\\text{SiO}_2 + 2\\text{H}_2 $$
+                                    $$3\\text{Fe}_2\\text{SiO}_4 \\text{ (Fayalite)} + 2\\text{H}_2\\text{O} \\rightarrow 2\\text{Fe}_3\\text{O}_4 \\text{ (Magnetite)} + 3\\text{SiO}_2 + 2\\text{H}_2$$
                                 </div>
                             </div>
                             <div>
@@ -419,6 +422,99 @@
                     </div>
                 `
             },
+            miso: {
+                title: "MISO Resource Adequacy & Grid Reliability",
+                content: `
+                    <div class="mb-6 p-4 bg-white rounded shadow border-l-4 border-blue-500">
+                        <h3 class="font-bold text-lg text-blue-800">The "Dunkelflaute" Advantage & UEVF Reliability</h3>
+                        <p class="text-sm text-stone-600 mt-1">
+                            Based on the <strong>MISO 2025-2026 LOLE Study</strong> and <strong>UEVF (Unified Evaluation Framework)</strong> models, the grid is shifting to seasonal risk. Intermittent renewables face severe accreditation penalties (low ELCC) during multi-day winter wind droughts (<em>Dunkelflaute</em>). Geologic H2 provides <strong>firm, dispatchable capacity</strong>, bypassing these penalties entirely while shielding industrial off-takers from grid exposure.
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <!-- Seasonal ELCC Chart -->
+                        <div class="card p-6">
+                            <h3 class="font-bold text-slate-800 mb-2">MISO Seasonal Capacity Accreditation (ELCC)</h3>
+                            <p class="text-xs text-stone-500 mb-4">Effective Load Carrying Capability by season. Wind degrades sharply in Summer/Winter peaks.</p>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="misoChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- UEVF / VOLL Simulator -->
+                        <div class="card p-6 bg-slate-900 text-white">
+                            <h3 class="font-bold text-amber-500 mb-4">UEVF Monetized Risk Simulator</h3>
+                            <p class="text-sm text-slate-300 mb-4">
+                                Electrolyzers act as "Large Load Additions" which can trigger Expected Unserved Energy (EUE) events on the MISO grid. Calculate the risk penalty using standard Value of Lost Load (VOLL = $10,000/MWh).
+                            </p>
+                            
+                            <label class="text-xs font-bold text-slate-400 uppercase block mb-2">Simulate Winter Wind Drought (Days)</label>
+                            <input type="range" id="slide-drought" min="0" max="7" step="1" value="3" class="w-full accent-blue-400 mb-4" oninput="updateMisoSim()">
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-slate-800 p-4 rounded border border-slate-700 text-center">
+                                    <span class="text-xs text-slate-400 block mb-1">Green H2 EUE Penalty</span>
+                                    <span class="text-2xl font-black text-red-400" id="val-eue">-$4.2M</span>
+                                </div>
+                                <div class="bg-slate-800 p-4 rounded border border-slate-700 text-center">
+                                    <span class="text-xs text-slate-400 block mb-1">Geologic H2 Firm Value</span>
+                                    <span class="text-2xl font-black text-green-400" id="val-firm">+$8.5M</span>
+                                </div>
+                            </div>
+                            <p id="miso-insight" class="mt-4 text-xs text-slate-300 italic border-l-2 border-amber-500 pl-3">
+                                A 3-day Dunkelflaute forces MISO to dispatch emergency reserves. Electrolyzers face curtailment or massive VOLL penalties.
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+            queue: {
+                title: "MTEP24 & Interconnection Strategy",
+                content: `
+                    <div class="mb-6 p-4 bg-white rounded shadow border-l-4 border-indigo-600">
+                        <h3 class="font-bold text-lg text-indigo-900">Bypassing the Interconnection Logjam</h3>
+                        <p class="text-sm text-stone-600 mt-1">
+                            The MISO Definitive Planning Phase (DPP) is severely backlogged. Furthermore, <strong>FERC Order 2023</strong> and strict <strong>IEEE 2800</strong> requirements force Inverter-Based Resources (IBRs like Wind/Solar) into complex dynamic model testing (PSCAD/EMT). Geologic H2 bypasses this entirely if distributed via pipeline, or utilizes highly-stable Synchronous Generation if converted to power.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Path 1 -->
+                        <div class="card p-6 border-t-4 border-red-500">
+                            <h4 class="font-bold text-slate-800 mb-2">Path A: Electrolytic (Green) H2</h4>
+                            <ul class="text-sm text-stone-600 space-y-3">
+                                <li><strong>Status:</strong> MISO Large Load Addition / New IBR Generation.</li>
+                                <li><strong>Timeline:</strong> 4-6 years in the DPP Queue.</li>
+                                <li><strong>Hurdles:</strong> IEEE 2800 compliance, TSAT UDM modeling, massive Network Upgrade cost allocation (MTEP).</li>
+                                <li><strong>Verdict:</strong> <span class="text-red-600 font-bold">High Risk / Delayed</span></li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Path 2 -->
+                        <div class="card p-6 border-t-4 border-amber-500">
+                            <h4 class="font-bold text-slate-800 mb-2">Path B: Geologic H2 (Grid Sync)</h4>
+                            <ul class="text-sm text-stone-600 space-y-3">
+                                <li><strong>Status:</strong> Synchronous Generation (Turbines).</li>
+                                <li><strong>Timeline:</strong> 2-3 years.</li>
+                                <li><strong>Hurdles:</strong> Standard GIA. Bypasses IBR transient stability scrutiny. Provides much-needed grid inertia and voltage support to weak MISO nodes.</li>
+                                <li><strong>Verdict:</strong> <span class="text-amber-600 font-bold">Medium Risk / Valued Asset</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Path 3 -->
+                        <div class="card p-6 border-t-4 border-green-500 bg-green-50">
+                            <h4 class="font-bold text-slate-800 mb-2">Path C: Geologic H2 (Pipeline)</h4>
+                            <ul class="text-sm text-stone-600 space-y-3">
+                                <li><strong>Status:</strong> Direct Industrial Offtake (Ammonia/Ag).</li>
+                                <li><strong>Timeline:</strong> Dictated purely by private capital and PHMSA regulations.</li>
+                                <li><strong>Hurdles:</strong> Landowner ROW (Eminent Domain). ZERO MISO/FERC electrical queue exposure.</li>
+                                <li><strong>Verdict:</strong> <span class="text-green-700 font-bold">Fastest to Market</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
             grid: {
                 title: "Grid Integration & Wind Curtailment",
                 content: `
@@ -617,10 +713,13 @@
                             <li><strong>[5] ERM (2023).</strong> "Review of Projections through 2040 of U.S. Clean Hydrogen Production, Infrastructure, and Costs." CAELP analysis of IRA 45V PTC impacts.</li>
                             <li><strong>[6] Ellis, G.S., et al. (2022).</strong> "Hydrogen generation from serpentinization in the subsurface." <em>Geochimica et Cosmochimica Acta</em>.</li>
                             <li><strong>[7] "Strategic Realignment" (2026).</strong> "The Strategic Realignment of the American Hydrogen Industry: A Comprehensive Analysis of Economic and Tax Transformations Post-OBBBA in 2026." Detailing the legislative shift to market-driven, execution-oriented development.</li>
-                            <li><strong>[8] Post-OBBA Technical Report.</strong> <a href="https://drive.google.com/file/d/1dBKUcUEUS2EDnjhAeQyqoE7-83h00a0v/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
-                            <li><strong>[9] Executive Slide Deck.</strong> <a href="https://drive.google.com/file/d/1KAqxyxrc6iW3W7e5b9XFgJncS4QRwy5q/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
-                            <li><strong>[10] Supplementary Data & Projections.</strong> <a href="https://drive.google.com/file/d/1MhDCYweWjl2wB0fB6wRatT1J5tmb1Jnt/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
-                            <li><strong>[11] Regional Economic Impact Models.</strong> <a href="https://drive.google.com/file/d/1lnCSDMCbcOE-pr4Z2CSs_GKZbwd9ZWsl/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[8] MISO LOLE & RRA (2024-2026).</strong> "MISO Planning Year 2025-2026 Loss of Load Expectation Study" & "2024 Regional Reliability Assessment".</li>
+                            <li><strong>[9] UEVF Framework (2025).</strong> "Technical Reliability Monetization Assessment: A Unified EUE×VOLL Framework" & "Integrating Transmission-Constrained Deliverability".</li>
+                            <li><strong>[10] IEEE 2800 / IBR Modeling.</strong> "Inverter-Based Resource Modeling Requirements (PAC-2024-2)" and NERC directives.</li>
+                            <li><strong>[11] Post-OBBA Technical Report.</strong> <a href="https://drive.google.com/file/d/1dBKUcUEUS2EDnjhAeQyqoE7-83h00a0v/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[12] Executive Slide Deck.</strong> <a href="https://drive.google.com/file/d/1KAqxyxrc6iW3W7e5b9XFgJncS4QRwy5q/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[13] Supplementary Data & Projections.</strong> <a href="https://drive.google.com/file/d/1MhDCYweWjl2wB0fB6wRatT1J5tmb1Jnt/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
+                            <li><strong>[14] Regional Economic Impact Models.</strong> <a href="https://drive.google.com/file/d/1lnCSDMCbcOE-pr4Z2CSs_GKZbwd9ZWsl/view?usp=share_link" target="_blank" class="text-sky-500 hover:underline">View Document</a></li>
                         </ul>
 
                         <h3 class="font-bold text-slate-800 mt-8 mb-4">Research Methodology</h3>
@@ -678,6 +777,7 @@
 
             // Inject Content
             const main = document.getElementById('main-content');
+            if (!reportData || !reportData[sectionKey]) return;
             const data = reportData[sectionKey];
             
             main.innerHTML = `
@@ -690,15 +790,18 @@
             // Tell MathJax to re-render formulas in the newly injected HTML
             if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
                 window.MathJax.typesetPromise([main]).catch((err) => console.log(err.message));
+            } else if (window.MathJax && typeof window.MathJax.typeset === 'function') {
+                 window.MathJax.typeset([main]);
             }
 
             // Initialize Module-Specific Scripts
             if (sectionKey === 'geo') initGeoCanvas();
             if (sectionKey === 'econ') initCostChart();
             if (sectionKey === 'infra') setTimeout(initInfra, 50); // slight delay for DOM
-            if (sectionKey === 'grid') setTimeout(initGridChart, 50);
+            if (sectionKey === 'miso') setTimeout(initMisoChart, 50);
             if (sectionKey === 'workforce') updateWorkforce(); // init default values
             if (sectionKey === 'outlook') initOutlookChart();
+            if (sectionKey === 'grid') setTimeout(initGridChart, 50);
             if (sectionKey === 'reg') updateSocialSim();
         }
 
@@ -1032,6 +1135,68 @@
             document.getElementById('bar-gas').style.width = `${(gasCapex/maxCapex)*100}%`;
         }
 
+        // --- Module: MISO Grid & Reliability ---
+        function initMisoChart() {
+            const ctx = document.getElementById('misoChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Summer', 'Fall', 'Winter', 'Spring'],
+                    datasets: [
+                        {
+                            label: 'Geologic H2 (Firm)',
+                            data: [95, 95, 95, 95], // Highly dispatchable
+                            backgroundColor: '#f59e0b',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Wind (IBR)',
+                            data: [15, 25, 10, 30], // MISO Seasonal ELCC approximations
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            max: 100,
+                            title: { display: true, text: 'ELCC Capacity Credit (%)' },
+                            grid: { color: '#f3f4f6' } 
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+            updateMisoSim();
+        }
+
+        function updateMisoSim() {
+            const days = parseInt(document.getElementById('slide-drought').value);
+            
+            // Simplified UEVF EUE * VOLL calculations for demo
+            // VOLL = $10k/MWh. A prolonged drought forces high VOLL exposure for electrolyzers buying grid power, 
+            // or zero output if behind-the-meter.
+            const euePenalty = (days * 1.4).toFixed(1); 
+            const firmValue = (days * 2.8 + 0.1).toFixed(1);
+
+            document.getElementById('val-eue').innerText = `-$${euePenalty}M`;
+            document.getElementById('val-firm').innerText = `+$${firmValue}M`;
+            
+            const insightEl = document.getElementById('miso-insight');
+            
+            if(days === 0) {
+                insightEl.innerText = `Standard grid conditions. No severe EUE penalties.`;
+            } else if (days <= 3) {
+                insightEl.innerText = `A ${days}-day Dunkelflaute forces MISO to dispatch emergency reserves. Electrolyzers face curtailment or massive VOLL penalties. Firm Geologic H2 captures high pricing.`;
+            } else {
+                insightEl.innerText = `CRITICAL EVENT: A ${days}-day wind drought causes severe MISO load shedding (LOLE violation). Green H2 production is halted. Geologic H2 serves as an essential grid lifeline.`;
+            }
+        }
+
         // --- Module: Grid Integration (Plotly) ---
         function initGridChart() {
             const xValues = [10, 20, 30, 40, 50, 60, 70]; // Wind Capacity Factor %
@@ -1284,7 +1449,7 @@
             `;
             historyEl.scrollTop = historyEl.scrollHeight;
 
-            const systemPrompt = "You are an expert energy analyst specializing in Geologic Hydrogen in the Midcontinent Rift System (Iowa/Nebraska). You have deep knowledge of the CAELP 2040 Projections (ERM), the 2024 DOE AMRs (04-09 covering infrastructure, fuel cells, systems integration, and GREET analysis), the National Clean Hydrogen Strategy Roadmap, the EPACT 1820 Employment Study, and the 2025/2026 OBBBA. You answer questions based on these documents. Keep your answers concise, professional, and directly related to hydrogen economics, infrastructure, geology, and policy in the Midwest. Format output in clean HTML (e.g. use <b>, <ul>, <li class='ml-4 list-disc'>, <br>) without markdown backticks.";
+            const systemPrompt = "You are an expert energy analyst specializing in Geologic Hydrogen in the Midcontinent Rift System (Iowa/Nebraska). You have deep knowledge of the CAELP 2040 Projections, the 2024 DOE AMRs, the EPACT 1820 Employment Study, the 2025/2026 OBBBA, and MISO Grid Reliability (including MTEP24, LOLE 25-26, UEVF Monetized Risk, VOLL/EUE, and IEEE 2800 IBR requirements). You answer questions based on these documents. Emphasize how Geologic H2 bypasses the interconnection queue and provides firm capacity compared to wind/solar IBRs. Keep your answers concise, professional, and directly related to hydrogen economics, infrastructure, grid reliability, geology, and policy in the Midwest. Format output in clean HTML (e.g. use <b>, <ul>, <li class='ml-4 list-disc'>, <br>) without markdown backticks.";
             
             const responseText = await callGemini(text, systemPrompt);
             
